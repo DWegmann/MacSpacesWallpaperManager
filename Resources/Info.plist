@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key><string>Mac Spaces Wallpaper Manager</string>
+    <key>CFBundleDisplayName</key><string>Mac Spaces Wallpaper Manager</string>
+    <key>CFBundleExecutable</key><string>MacSpacesWallpaperManager</string>
+    <!-- Retain the existing application identity across the rename. -->
+    <key>CFBundleIdentifier</key><string>app.spacepaper.mac</string>
+    <key>CFBundlePackageType</key><string>APPL</string>
+    <key>CFBundleShortVersionString</key><string>1.2.0</string>
+    <key>CFBundleVersion</key><string>4</string>
+    <key>CFBundleDevelopmentRegion</key><string>de</string>
+    <key>CFBundleIconFile</key><string>AppIcon</string>
+    <key>LSMinimumSystemVersion</key><string>13.0</string>
+    <key>LSApplicationCategoryType</key><string>public.app-category.utilities</string>
+    <key>NSHighResolutionCapable</key><true/>
+    <key>NSSupportsAutomaticGraphicsSwitching</key><true/>
+    <key>NSPrincipalClass</key><string>NSApplication</string>
+    <key>NSHumanReadableCopyright</key><string>Mac Spaces Wallpaper Manager · 2026</string>
+</dict>
+</plist>
