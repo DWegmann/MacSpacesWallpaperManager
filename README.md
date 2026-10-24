@@ -1,12 +1,12 @@
 # Mac Spaces Wallpaper Manager
 
-**English** | [Deutsch](README.de.md)
+**English** | [German](README.de.md)
 
 I developed Mac Spaces Wallpaper Manager for my own use. If you would like to use the app but cannot build it yourself, feel free to get in touch through a [GitHub issue](https://github.com/DWegmann/MacSpacesWallpaperManager/issues).
 
 > **Noncommercial reuse only:** The original project code may be used, modified and shared under the [PolyForm Noncommercial License 1.0.0](LICENSE.md). This license does not permit commercial use.
 
-A native macOS app with a separate wallpaper folder for each desktop Space and display. Built with **SwiftUI and AppKit**, with no external dependencies. The universal app supports **Apple Silicon (arm64) and Intel (x86_64), starting with macOS 13 Ventura**. The current app interface is in German; this repository includes English and German documentation.
+A native macOS app with a separate wallpaper folder for each desktop Space and display. Built with **SwiftUI and AppKit**, with no external dependencies. The universal app supports **Apple Silicon (arm64) and Intel (x86_64), starting with macOS 13 Ventura**. The current app interface is in German; this repository includes English and German documentation. Control names below are English translations of the German interface labels.
 
 **macOS 26 Tahoe is an intended target.** The app's minimum version is macOS 13; the optional direct mode requires macOS 14. Neither requires APIs available only in macOS 27. Space detection and direct mode use private macOS interfaces and may need changes after system updates. Direct mode checks the detected storage format before each change and is disabled by default.
 
@@ -62,31 +62,31 @@ Otherwise, the scripts use the selected macOS SDK. The deployment target remains
 ## Usage
 
 1. Select a desktop in the sidebar. Create additional desktops in Mission Control first.
-2. Choose **Bilderordner auswählen** to assign an image folder. Standard mode applies an initial image to a visible desktop immediately; an inactive desktop receives it on its next visit. Optional direct mode can update inactive desktops immediately.
-3. Toggle **Unterordner einbeziehen** to include subfolders. Recursive scanning is enabled by default.
+2. Click **Choose image folder** to assign an image folder. Standard mode applies an initial image to a visible desktop immediately; an inactive desktop receives it on its next visit. Optional direct mode can update inactive desktops immediately.
+3. Toggle **Include subfolders** to include subfolders. Recursive scanning is enabled by default.
 4. Choose an image from the gallery, change the display mode or configure automatic rotation.
 
 Each Space has its own folder, recursion setting, image selection, display mode, order and interval. Random selection avoids an immediate repeat when at least two images are available. Alphabetical order uses natural filename sorting.
 
 ### Edit multiple Spaces
 
-Choose **Auswählen** beside **Deine Spaces** to enter multiple selection. Check the desired desktops; **Alle** beside a display selects its Spaces. The shared editor also offers **Alle auswählen** and **Auswahl leeren**.
+Choose **Select** beside **Your Spaces** to enter multiple selection. Check the desired desktops; **All** beside a display selects its Spaces. The shared editor also offers **Select all** and **Clear selection**.
 
-Enable only the settings you want to change: folder, subfolders, rotation, image scaling, background color, order or activation. **Auf … Spaces anwenden** applies those fields to the selected Spaces. Existing image selections remain unless you assign a new folder, which clears the affected selections and rescans the folder. **Fertig** or **Mehrfachauswahl beenden** returns to single-Space editing.
+Enable only the settings you want to change: folder, subfolders, rotation, image scaling, background color, order or activation. **Apply to … Spaces** applies those fields to the selected Spaces. Existing image selections remain unless you assign a new folder, which clears the affected selections and rescans the folder. **Done** or **Exit multiple selection** returns to single-Space editing.
 
 ### Scaling and background color
 
-Selecting **An Bildschirm anpassen** reveals **Hintergrundfarbe**, a native color picker. The color fills the unused area around the image and appears in the preview. **Schwarz** resets it. Colors are saved per Space and work in both standard and direct mode. The shared editor can apply a color to several Spaces; it changes scaling only when that setting is also checked. Existing configurations without a color continue to use black.
+Selecting **Fit to screen** reveals **Background color**, a native color picker. The color fills the unused area around the image and appears in the preview. **Black** resets it. Colors are saved per Space and work in both standard and direct mode. The shared editor can apply a color to several Spaces; it changes scaling only when that setting is also checked. Existing configurations without a color continue to use black.
 
 ### Rotation and menu bar
 
-Rotation can be manual, on reentering a Space, every 5, 15 or 30 minutes, hourly or daily. In standard mode, inactive desktops catch up when visited; direct mode can update them while inactive. No timer work runs during sleep. Use **Ordner neu einlesen** to pick up added or removed files. The timer checks every 15 seconds, so scheduled changes may be slightly delayed.
+Rotation can be manual, on reentering a Space, every 5, 15 or 30 minutes, hourly or daily. In standard mode, inactive desktops catch up when visited; direct mode can update them while inactive. No timer work runs during sleep. Use **Rescan folder** to pick up added or removed files. The timer checks every 15 seconds, so scheduled changes may be slightly delayed.
 
-Closing the window leaves the app running in the menu bar, with **Nächstes Hintergrundbild**, **Automatik pausieren** and **Beenden**. `⌘R` refreshes the Space list; `⇧⌘N` selects the next image for visible, enabled Spaces. Settings (`⌘,`) include launch at login.
+Closing the window leaves the app running in the menu bar, with **Next wallpaper**, **Pause automatic rotation** and **Quit**. `⌘R` refreshes the Space list; `⇧⌘N` selects the next image for visible, enabled Spaces. Settings (`⌘,`) include launch at login.
 
 ## Optional direct mode for inactive Spaces
 
-Enable **Einstellungen → Direktmodus (experimentell) → Auch inaktive Spaces sofort aktualisieren** to use the unofficial storage method. It is off by default for new and existing installations and requires macOS 14 or later with a readable `Index.plist`.
+Enable **Settings → Direct mode (experimental) → Update inactive Spaces immediately** to use the unofficial storage method. It is off by default for new and existing installations and requires macOS 14 or later with a readable `Index.plist`.
 
 Direct mode applies image selection, scaling and rotation to assigned inactive desktop Spaces without switching desktops. Changes to several Spaces are briefly collected to reduce background-service restarts.
 
@@ -102,7 +102,7 @@ Before each actual change, the app creates a local backup. It pauses the logged-
 
 Writes are atomic. The app checks for concurrent changes before writing and after reloading. On error, it attempts to undo its own change, disables direct mode and pauses rotation. It displays the reason and backup location; you can then continue in standard mode.
 
-**Letzte Direktmodus-Änderung rückgängig machen …** restores only the desktop wallpapers affected by the last direct-mode change and pauses rotation. If an affected wallpaper has since changed outside the app, restoration stops. Later changes to other Spaces and existing screen savers remain intact.
+**Undo last direct-mode change …** restores only the desktop wallpapers affected by the last direct-mode change and pauses rotation. If an affected wallpaper has since changed outside the app, restoration stops. Later changes to other Spaces and existing screen savers remain intact.
 
 The ten latest backups are kept under:
 
@@ -136,7 +136,7 @@ Original images remain unchanged in your folder. The app has no network function
 ~/Library/Application Support/SpacePaper/configuration.json
 ```
 
-The internal data directory and bundle identifier retain the earlier SpacePaper name to preserve existing assignments. If the configuration is corrupted or unknown, automatic changes stop and the file is preserved. Use **Einstellungsdatei im Finder zeigen**, quit the app, then back up and rename the file if you want to start with a fresh configuration.
+The internal data directory and bundle identifier retain the earlier SpacePaper name to preserve existing assignments. If the configuration is corrupted or unknown, automatic changes stop and the file is preserved. Use **Show configuration file in Finder**, quit the app, then back up and rename the file if you want to start with a fresh configuration.
 
 ## Validation
 
