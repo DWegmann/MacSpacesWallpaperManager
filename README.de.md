@@ -2,7 +2,7 @@
 
 [English](README.md) | **Deutsch**
 
-Ich habe Mac Spaces Wallpaper Manager für den eigenen Gebrauch entwickelt. Wenn du die App verwenden möchtest, sie aber nicht selbst bauen kannst, melde dich über ein [GitHub-Issue](https://github.com/DWegmann/MacSpacesWallpaperManager/issues).
+Ich habe Mac Spaces Wallpaper Manager für den eigenen Gebrauch entwickelt. Die fertige Universal-App gibt es unter [GitHub Releases](https://github.com/DWegmann/MacSpacesWallpaperManager/releases/latest). Fehler und Vorschläge kannst du über ein [GitHub-Issue](https://github.com/DWegmann/MacSpacesWallpaperManager/issues) melden.
 
 > **Nichtkommerzielle Weiterverwendung:** Der ursprüngliche Projektcode darf unter der [PolyForm Noncommercial License 1.0.0](LICENSE.md) verwendet, verändert und weitergegeben werden. Diese Lizenz erlaubt keine kommerzielle Nutzung.
 
@@ -28,7 +28,22 @@ Required Notice: Copyright 2026 Dominic Wegmann
 
 Die Lizenz gilt für die ursprünglichen Projektbestandteile, soweit entsprechende Rechte bestehen. Der Quellcode ist zur nichtkommerziellen Weiterverwendung öffentlich verfügbar („source available“); die kommerzielle Einschränkung entspricht keiner Open-Source-Lizenz im Sinne der OSI.
 
-## App bauen und starten
+## Download und erster Start
+
+1. Lade [Mac-Spaces-Wallpaper-Manager-universal.zip](https://github.com/DWegmann/MacSpacesWallpaperManager/releases/latest/download/Mac-Spaces-Wallpaper-Manager-universal.zip) aus dem aktuellen Release herunter. Dieselbe App läuft auf Apple-Silicon- und Intel-Macs ab macOS 13. Xcode oder Entwicklerwerkzeuge sind nicht erforderlich.
+2. Entpacke das ZIP per Doppelklick im Finder und verschiebe **Mac Spaces Wallpaper Manager.app** in den Ordner **Programme**.
+3. Starte die App per Doppelklick.
+
+Die veröffentlichte App ist **ad-hoc signiert und nicht von Apple notarisiert**. macOS kann den ersten Start blockieren, weil der Entwickler nicht verifiziert oder die App nicht auf Schadsoftware geprüft werden kann. Wenn du diesem Download vertraust, kannst du die App nach Apples Anleitung einzeln freigeben:
+
+1. Versuche einmal, die App zu öffnen, und schließe die Warnung, ohne die App in den Papierkorb zu bewegen.
+2. Öffne **Systemeinstellungen → Datenschutz & Sicherheit** und scrolle zum Abschnitt **Sicherheit**.
+3. Klicke bei der Meldung zu Mac Spaces Wallpaper Manager auf **Dennoch öffnen**.
+4. Bestätige gegebenenfalls mit deinem Passwort oder Touch ID und anschließend im Dialog mit **Öffnen**.
+
+Danach kannst du die App wie gewohnt aus dem Programme-Ordner starten. Die Freigabe gilt für diese App; Gatekeeper oder System Integrity Protection (SIP) müssen dafür nicht abgeschaltet werden. Siehe auch [Apples Anleitung zum Öffnen nicht notarisierter Apps](https://support.apple.com/de-de/102445). Auf einem verwalteten Mac kann die Richtlinie deiner Organisation die Freigabe verhindern.
+
+## App selbst bauen
 
 Voraussetzung für den App-Build: Xcode oder die Xcode Command Line Tools mit Swift 5.9 oder neuer. Für die XCTest-Tests wird vollständiges Xcode benötigt.
 
@@ -143,7 +158,7 @@ xcrun notarytool submit dist/Mac-Spaces-Wallpaper-Manager-universal.zip --keycha
 xcrun stapler staple "dist/Mac Spaces Wallpaper Manager.app"
 ```
 
-Für öffentliche Distribution sind eine eigene Developer-ID-Signatur und Notarisierung erforderlich. Die lokal erstellte ad-hoc-Signatur dient zum Start auf diesem Mac. Nach dem Stapeln für die Weitergabe ein neues ZIP mit `ditto -c -k --sequesterRsrc --keepParent "dist/Mac Spaces Wallpaper Manager.app" dist/Mac-Spaces-Wallpaper-Manager-notarized.zip` erzeugen.
+Der GitHub-Download ist ad-hoc signiert und nicht notarisiert; dafür gilt die Anleitung zum ersten Start weiter oben. Für eine mit Developer ID signierte und notarisierte Variante werden eigene Apple-Zugangsdaten für die obigen Befehle benötigt. Nach dem Stapeln für die Weitergabe ein neues ZIP mit `ditto -c -k --sequesterRsrc --keepParent "dist/Mac Spaces Wallpaper Manager.app" dist/Mac-Spaces-Wallpaper-Manager-notarized.zip` erzeugen.
 
 ## Projektstruktur
 
