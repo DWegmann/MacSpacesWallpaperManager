@@ -6,7 +6,7 @@ I developed Mac Spaces Wallpaper Manager for my own use. Download the ready-to-r
 
 > **Noncommercial reuse only:** The original project code may be used, modified and shared under the [PolyForm Noncommercial License 1.0.0](LICENSE.md). This license does not permit commercial use.
 
-A native macOS app with a separate wallpaper folder for each desktop Space and display. Built with **SwiftUI and AppKit**, with no external dependencies. The universal app supports **Apple Silicon (arm64) and Intel (x86_64), starting with macOS 13 Ventura**. The current app interface is in German; this repository includes English and German documentation. Control names below are English translations of the German interface labels.
+A native macOS app with a separate wallpaper folder for each desktop Space and display. Built with **SwiftUI and AppKit**, using Sparkle 2 for app updates. The universal app supports **Apple Silicon (arm64) and Intel (x86_64), starting with macOS 13 Ventura**. The current app interface is in German; this repository includes English and German documentation. Control names below are English translations of the German interface labels.
 
 **macOS 26 Tahoe is an intended target.** The app's minimum version is macOS 13; the optional direct mode requires macOS 14. Neither requires APIs available only in macOS 27. Space detection and direct mode use private macOS interfaces and may need changes after system updates. Direct mode checks the detected storage format before each change and is disabled by default.
 
@@ -18,7 +18,7 @@ A native macOS app with a separate wallpaper folder for each desktop Space and d
 - Edit settings for multiple Spaces together, choose image scaling and set a background color.
 - Control rotation from the menu bar, pause it or enable launch at login.
 - Optionally update inactive Spaces through an experimental direct mode with local backups and undo.
-- Keep images and configuration on your Mac, without network services or external libraries.
+- Keep image processing local; optionally check GitHub for updates and install them with a click.
 
 ## License
 
@@ -44,6 +44,8 @@ The release app is **ad-hoc signed and not notarized by Apple**. macOS may block
 After approval, launch the app normally from Applications. This creates an exception for this app; you do not need to disable Gatekeeper or System Integrity Protection (SIP). See [Apple's instructions for opening an app that has not been notarized](https://support.apple.com/en-us/102445). On a managed Mac, your organization's policy may prevent approval.
 
 ## Build from source
+
+On the first build, Swift Package Manager downloads Sparkle 2.10.0 from GitHub. Its license notices are included in [ThirdPartyNotices.md](ThirdPartyNotices.md) and copied into the app bundle.
 
 Install Xcode or the Xcode Command Line Tools with Swift 5.9 or later. Running the XCTest suite requires full Xcode.
 
@@ -76,6 +78,10 @@ Otherwise, the scripts use the selected macOS SDK. The deployment target remains
 
 ## Usage
 
+Starting with version 1.3.0, the app checks for updates daily by default. **Check for Updates…** (`Nach Updates suchen …`) is available in the app menu, menu bar and **Settings → Updates**. You can disable automatic checks there and still check manually. Download and installation require a click, followed by an app restart. Both the update feed and ZIP are verified using an app-specific Ed25519 key. Images, folder paths and system profiles are not sent; GitHub receives the usual connection data associated with a download request.
+
+Older versions need one manual installation of version 1.3.0 or later to receive the updater. The feed becomes available when the first release containing `appcast.xml` is published. See [UPDATING.md](UPDATING.md) for preparing and publishing signed updates.
+
 1. Select a desktop in the sidebar. Create additional desktops in Mission Control first.
 2. Click **Choose image folder** to assign an image folder. Standard mode applies an initial image to a visible desktop immediately; an inactive desktop receives it on its next visit. Optional direct mode can update inactive desktops immediately.
 3. Toggle **Include subfolders** to include subfolders. Recursive scanning is enabled by default.
@@ -91,7 +97,7 @@ Enable only the settings you want to change: folder, subfolders, rotation, image
 
 ### Scaling and background color
 
-Selecting **Fit to screen** reveals **Background color**, a native color picker. The color fills the unused area around the image and appears in the preview. **Black** resets it. Colors are saved per Space and work in both standard and direct mode. The shared editor can apply a color to several Spaces; it changes scaling only when that setting is also checked. Existing configurations without a color continue to use black.
+Selecting **Fit to screen** reveals **Background color**, a native color picker. The color fills the unused area around the image and appears in the preview. The current color name (for example **Silver**) or hex value is displayed beside the color well. **Reset to Black** resets it. Colors are saved per Space and work in both standard and direct mode. The shared editor can apply a color to several Spaces; it changes scaling only when that setting is also checked. Existing configurations without a color continue to use black.
 
 ### Rotation and menu bar
 
@@ -145,7 +151,7 @@ The app therefore dynamically loads two **read-only, private SkyLight functions*
 
 The scanner detects JPEG, PNG, HEIC, TIFF and other formats readable by macOS Image I/O. It reads image metadata and generates reduced, cached thumbnails. Hidden files, package contents and symbolic links are skipped. Corrupted images and unreadable subfolders are reported. A damaged file can still cause a separate macOS error when applied as wallpaper.
 
-Original images remain unchanged in your folder. The app has no network functionality or external services. Settings and folder bookmarks are saved atomically under:
+Original images remain unchanged in your folder. Images and folder assignments are processed locally. Only the update feature connects to GitHub; automatic checks can be disabled. Settings and folder bookmarks are saved atomically under:
 
 ```text
 ~/Library/Application Support/SpacePaper/configuration.json
@@ -203,5 +209,6 @@ ditto -c -k --sequesterRsrc --keepParent \
 - `Resources/Info.plist`: application metadata and minimum system version.
 - `Scripts`: SDK selection, Swift builds and universal-app packaging.
 - `Tools/GenerateIcon.swift`: app icon generation.
+- `Scripts/prepare-update.sh`, `ReleaseNotes`, `UPDATING.md`: signed update packages and release instructions.
 
 Build products and local development files are excluded through `.gitignore`. Report bugs and suggestions through [GitHub issues](https://github.com/DWegmann/MacSpacesWallpaperManager/issues). For Space-detection problems, include your macOS version, architecture, display setup and a sanitized error message.

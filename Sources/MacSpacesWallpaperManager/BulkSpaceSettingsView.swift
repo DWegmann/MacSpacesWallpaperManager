@@ -131,7 +131,7 @@ struct BulkSpaceSettingsView: View {
             }
             Divider()
             field("Hintergrundfarbe ändern", selected: $draft.changeColor) {
-                ColorPicker("Farbe", selection: $draft.color, supportsOpacity: false)
+                ColorPicker("Farbe: \(WallpaperColor(draft.color).displayName)", selection: $draft.color, supportsOpacity: false)
                     .frame(maxWidth: 350)
                 Text("Wird bei „An Bildschirm anpassen“ für die freien Flächen verwendet.")
                     .font(.system(size: 10)).foregroundStyle(.secondary)

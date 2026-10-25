@@ -23,7 +23,19 @@ done
 
 ARM_BIN_DIR="$("$PROJECT_ROOT/Scripts/swift-task.sh" build -c release --triple arm64-apple-macosx13.0 --show-bin-path)"
 INTEL_BIN_DIR="$("$PROJECT_ROOT/Scripts/swift-task.sh" build -c release --triple x86_64-apple-macosx13.0 --show-bin-path)"
-mkdir -p "$APP_BUNDLE/Contents/MacOS" "$APP_BUNDLE/Contents/Resources"
+SPARKLE_ARTIFACT="$BUILD_ROOT/spm/artifacts/sparkle/Sparkle"
+SPARKLE_FRAMEWORK="$SPARKLE_ARTIFACT/Sparkle.xcframework/macos-arm64_x86_64/Sparkle.framework"
+if [ ! -d "$SPARKLE_FRAMEWORK" ]; then
+    printf 'Sparkle.framework fehlt: %s\n' "$SPARKLE_FRAMEWORK" >&2
+    exit 1
+fi
+mkdir -p "$APP_BUNDLE/Contents/MacOS" "$APP_BUNDLE/Contents/Resources" "$APP_BUNDLE/Contents/Frameworks"
+# Replace the previous copy so stale framework files cannot survive a rebuild.
+rm -rf "$APP_BUNDLE/Contents/Frameworks/Sparkle.framework"
+/usr/bin/ditto "$SPARKLE_FRAMEWORK" "$APP_BUNDLE/Contents/Frameworks/Sparkle.framework"
+# The app is not sandboxed. Sparkle's optional sandbox XPC services are not needed.
+rm -rf "$APP_BUNDLE/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices"
+cp "$PROJECT_ROOT/ThirdPartyNotices.md" "$APP_BUNDLE/Contents/Resources/ThirdPartyNotices.md"
 cp "$PROJECT_ROOT/Resources/Info.plist" "$APP_BUNDLE/Contents/Info.plist"
 /usr/bin/plutil -insert DTSDKName -string "$APP_SDK_NAME" "$APP_BUNDLE/Contents/Info.plist"
 /usr/bin/xcrun lipo -create "$ARM_BIN_DIR/$APP_EXECUTABLE" "$INTEL_BIN_DIR/$APP_EXECUTABLE" \
@@ -34,11 +46,19 @@ chmod +x "$APP_BUNDLE/Contents/MacOS/$APP_EXECUTABLE"
     -module-cache-path "$BUILD_ROOT/module-cache" \
     "$PROJECT_ROOT/Tools/GenerateIcon.swift" "$BUILD_ROOT/AppIcon.iconset" "$APP_BUNDLE/Contents/Resources/AppIcon.icns"
 
-if [ "$SIGN_IDENTITY" = "-" ]; then
-    /usr/bin/codesign --force --sign - "$APP_BUNDLE"
-else
-    /usr/bin/codesign --force --options runtime --timestamp --sign "$SIGN_IDENTITY" "$APP_BUNDLE"
-fi
+sign_code() {
+    if [ "$SIGN_IDENTITY" = "-" ]; then
+        /usr/bin/codesign --force --sign - "$1"
+    else
+        /usr/bin/codesign --force --options runtime --timestamp --sign "$SIGN_IDENTITY" "$1"
+    fi
+}
+# Sign inside out. Do not use --deep for signing nested executable code.
+EMBEDDED_SPARKLE="$APP_BUNDLE/Contents/Frameworks/Sparkle.framework/Versions/B"
+sign_code "$EMBEDDED_SPARKLE/Autoupdate"
+sign_code "$EMBEDDED_SPARKLE/Updater.app"
+sign_code "$APP_BUNDLE/Contents/Frameworks/Sparkle.framework"
+sign_code "$APP_BUNDLE"
 /usr/bin/codesign --verify --deep --strict "$APP_BUNDLE"
 APP_ARCHITECTURES="$(/usr/bin/xcrun lipo -archs "$APP_BUNDLE/Contents/MacOS/$APP_EXECUTABLE")"
 case "$APP_ARCHITECTURES" in

@@ -110,6 +110,13 @@ final class AppModel: ObservableObject {
     func rule(for id: String) -> SpaceRule { configuration.rules[id] ?? SpaceRule() }
     func library(for id: String) -> LibraryState { libraries[id] ?? LibraryState() }
 
+    func currentImageURL(for space: DesktopSpace) -> URL? {
+        guard space.isVisible, let screen = NSScreen.screens.first(where: {
+            ($0.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.uint32Value == space.display.displayID
+        }) else { return nil }
+        return NSWorkspace.shared.desktopImageURL(for: screen)
+    }
+
     func refreshSpaces() {
         let previouslyVisible = Set(spaces.filter(\.isVisible).map(\.id))
         do {

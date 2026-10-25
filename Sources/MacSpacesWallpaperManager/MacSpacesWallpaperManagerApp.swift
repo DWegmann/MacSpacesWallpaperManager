@@ -5,6 +5,7 @@ import WallpaperCore
 struct MacSpacesWallpaperManagerApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
     @StateObject private var model = AppModel()
+    @StateObject private var updates = UpdateController()
 
     var body: some Scene {
         Window("Mac Spaces Wallpaper Manager", id: "main") {
@@ -15,6 +16,9 @@ struct MacSpacesWallpaperManagerApp: App {
         .defaultSize(width: 1120, height: 790)
         .windowStyle(.hiddenTitleBar)
         .commands {
+            CommandGroup(after: .appInfo) {
+                CheckForUpdatesButton(updates: updates)
+            }
             CommandGroup(replacing: .newItem) {}
             CommandMenu("Hintergrundbilder") {
                 Button("Nächstes Bild für sichtbare Spaces") { model.nextVisibleImages() }
@@ -27,11 +31,11 @@ struct MacSpacesWallpaperManagerApp: App {
         }
 
         MenuBarExtra("Mac Spaces Wallpaper Manager", systemImage: "rectangle.on.rectangle.angled") {
-            MenuBarView().environmentObject(model)
+            MenuBarView(updates: updates).environmentObject(model)
         }
 
         Settings {
-            SettingsView().environmentObject(model)
+            SettingsView(updates: updates).environmentObject(model)
         }
     }
 }
@@ -67,6 +71,7 @@ func showMainWindow() {
 }
 
 private struct MenuBarView: View {
+    @ObservedObject var updates: UpdateController
     @EnvironmentObject private var model: AppModel
     @Environment(\.openWindow) private var openWindow
 
@@ -84,13 +89,16 @@ private struct MenuBarView: View {
         Divider()
         ForEach(model.spaces.filter(\.isVisible)) { space in
             Text("\(space.title) · \(space.display.name)")
+            Text("Aktuelles Bild: \(model.currentImageURL(for: space)?.lastPathComponent ?? "Nicht verfügbar")")
         }
         Divider()
+        CheckForUpdatesButton(updates: updates)
         Button("Beenden") { NSApp.terminate(nil) }.keyboardShortcut("q")
     }
 }
 
 private struct SettingsView: View {
+    @ObservedObject var updates: UpdateController
     @EnvironmentObject private var model: AppModel
     @ViewState private var showRestoreConfirmation = false
 
@@ -106,6 +114,19 @@ private struct SettingsView: View {
                 }
                 Text("Nach dem Schließen des Fensters läuft die App in der Menüleiste weiter.")
                     .font(.caption).foregroundStyle(.secondary)
+            }
+            Section("Updates") {
+                Toggle("Automatisch nach Updates suchen", isOn: Binding(
+                    get: { updates.automaticallyChecksForUpdates },
+                    set: { updates.setAutomaticallyChecksForUpdates($0) }
+                ))
+                .disabled(updates.startupError != nil)
+                CheckForUpdatesButton(updates: updates)
+                Text("Prüft täglich über GitHub auf neue Versionen. Download und Installation startest du per Klick; anschließend wird die App neu gestartet.")
+                    .font(.caption).foregroundStyle(.secondary)
+                if let error = updates.startupError {
+                    Text(error).font(.caption).foregroundStyle(.secondary)
+                }
             }
             Section("Spaces") {
                 Text("Jeder Desktop erhält seinen eigenen Bilderordner. Im Standardmodus wird ein inaktiver Desktop beim nächsten Besuch aktualisiert. Vollbild-Spaces werden ausgelassen.")

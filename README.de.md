@@ -6,7 +6,7 @@ Ich habe Mac Spaces Wallpaper Manager für den eigenen Gebrauch entwickelt. Die 
 
 > **Nichtkommerzielle Weiterverwendung:** Der ursprüngliche Projektcode darf unter der [PolyForm Noncommercial License 1.0.0](LICENSE.md) verwendet, verändert und weitergegeben werden. Diese Lizenz erlaubt keine kommerzielle Nutzung.
 
-Native macOS-App für eigene Bilderordner pro Desktop-Space und Bildschirm. Geschrieben mit SwiftUI und AppKit, ohne externe Abhängigkeiten. Ein Universal-Binary unterstützt **Apple Silicon (ARM64) und Intel (x86_64), ab macOS 13 Ventura**.
+Native macOS-App für eigene Bilderordner pro Desktop-Space und Bildschirm. Geschrieben mit SwiftUI und AppKit, mit Sparkle 2 für App-Updates. Ein Universal-Binary unterstützt **Apple Silicon (ARM64) und Intel (x86_64), ab macOS 13 Ventura**.
 
 **macOS 26 Tahoe ist ausdrücklich als Ziel vorgesehen.** Die Mindestversion der App ist macOS 13, die des optionalen Direktmodus macOS 14; beide schließen macOS 26 ein. Es werden keine ausschließlich ab macOS 27 verfügbaren öffentlichen APIs benötigt. Der Direktmodus prüft das vorgefundene private Speicherformat vor jeder Änderung und bleibt standardmäßig ausgeschaltet.
 
@@ -18,7 +18,7 @@ Native macOS-App für eigene Bilderordner pro Desktop-Space und Bildschirm. Gesc
 - Gemeinsame Bearbeitung mehrerer Spaces, Bildanpassung und eigene Hintergrundfarben.
 - Menüleistensteuerung, Pause und optionaler Start bei der Anmeldung.
 - Optionaler experimenteller Direktmodus für inaktive Spaces mit lokalen Sicherungen und Rücknahme.
-- Ausschließlich lokale Verarbeitung, keine externen Dienste oder Bibliotheken.
+- Lokale Bildverarbeitung; abschaltbare Update-Prüfung über GitHub und Installation per Klick.
 
 ## Lizenz
 
@@ -45,6 +45,8 @@ Danach kannst du die App wie gewohnt aus dem Programme-Ordner starten. Die Freig
 
 ## App selbst bauen
 
+Beim ersten Build lädt Swift Package Manager Sparkle 2.10.0 von GitHub herunter. Lizenzhinweise stehen in [ThirdPartyNotices.md](ThirdPartyNotices.md) und werden in die App übernommen.
+
 Voraussetzung für den App-Build: Xcode oder die Xcode Command Line Tools mit Swift 5.9 oder neuer. Für die XCTest-Tests wird vollständiges Xcode benötigt.
 
 ```sh
@@ -69,6 +71,10 @@ Ein installiertes **macOS-26-SDK** wird automatisch bevorzugt, auch wenn die aus
 
 ## Benutzung
 
+Ab Version 1.3.0 prüft die App standardmäßig täglich auf neue Versionen. **Nach Updates suchen …** ist im App-Menü, in der Menüleiste und unter **Einstellungen → Updates** verfügbar. Dort lässt sich die automatische Prüfung ausschalten; die manuelle Prüfung bleibt verfügbar. Download und Installation startest du per Klick. Anschließend wird die App neu gestartet. Update-Feed und ZIP werden mit einem eigenen Ed25519-Schlüssel geprüft; es werden keine Bilder oder Ordnerpfade übertragen und kein Systemprofil gesendet. GitHub erhält die üblichen Verbindungsdaten einer Download-Anfrage.
+
+Ältere Versionen müssen einmal manuell durch eine Version ab 1.3.0 ersetzt werden. Der Update-Feed ist verfügbar, sobald das erste Release mit `appcast.xml` veröffentlicht wurde. Hinweise zum Erstellen und Veröffentlichen signierter Updates stehen in [UPDATING.md](UPDATING.md).
+
 1. Gewünschten Desktop in der Seitenleiste auswählen. Weitere Desktops vorher in Mission Control anlegen.
 2. **Bilderordner auswählen**. Im Standardmodus wird ein erstes Bild auf dem sichtbaren Desktop gesetzt; ein inaktiver Desktop erhält es beim nächsten Besuch. Der zusätzliche Direktmodus kann auch inaktive Desktops sofort aktualisieren.
 3. **Unterordner einbeziehen** schaltet die rekursive Suche ein oder aus; standardmäßig ist sie eingeschaltet.
@@ -84,7 +90,7 @@ Anschließend die gewünschten Änderungen anhaken: Bilderordner, Unterordner, B
 
 ### Hintergrundfarbe beim Anpassen
 
-Bei der Darstellung **An Bildschirm anpassen** erscheint **Hintergrundfarbe** mit einer nativen Farbauswahl. Die Farbe füllt die freien Flächen neben beziehungsweise über dem Bild und ist in der Vorschau sichtbar. **Schwarz** setzt die Farbe zurück. Sie wird pro Space gespeichert und funktioniert im Standardmodus und im optionalen Direktmodus. In der Mehrfachauswahl lässt sich dieselbe Farbe auf mehrere Spaces übertragen; die Darstellung wird dabei nur geändert, wenn auch „Darstellung ändern“ angehakt ist. Vorhandene Einstellungen ohne Farbangabe verwenden weiterhin Schwarz.
+Bei der Darstellung **An Bildschirm anpassen** erscheint **Hintergrundfarbe** mit einer nativen Farbauswahl. Die Farbe füllt die freien Flächen neben beziehungsweise über dem Bild und ist in der Vorschau sichtbar. Der aktuelle Farbname (etwa **Silber**) beziehungsweise der Hexwert wird direkt angezeigt. **Auf Schwarz zurücksetzen** setzt die Farbe zurück. Sie wird pro Space gespeichert und funktioniert im Standardmodus und im optionalen Direktmodus. In der Mehrfachauswahl lässt sich dieselbe Farbe auf mehrere Spaces übertragen; die Darstellung wird dabei nur geändert, wenn auch „Darstellung ändern“ angehakt ist. Vorhandene Einstellungen ohne Farbangabe verwenden weiterhin Schwarz.
 
 Automatischer Wechsel: manuell, bei erneutem Betreten eines Spaces, alle 5/15/30 Minuten, stündlich oder täglich. Im Standardmodus holen inaktive Desktops einen fälligen Wechsel beim nächsten Besuch nach; mit eingeschaltetem Direktmodus werden auch inaktive Desktops aktualisiert. Während des Ruhezustands wird kein Timer abgearbeitet. Neue oder entfernte Dateien werden mit **Ordner neu einlesen** übernommen. Der Timer prüft alle 15 Sekunden, sodass Intervalle entsprechend leicht verzögert sein können.
 
@@ -122,7 +128,7 @@ Mac Spaces Wallpaper Manager lädt deshalb zwei **nur lesende, nicht öffentlich
 
 JPEG, PNG, HEIC, TIFF und weitere von macOS ImageIO lesbare Bildformate werden automatisch erkannt. Die App liest Bildmetadaten ein und erzeugt verkleinerte, zwischengespeicherte Vorschauen. Versteckte Dateien, Paket-Inhalte und symbolische Verknüpfungen werden übersprungen. Fehlerhafte Bilder und nicht lesbare Unterordner werden mit einem Hinweis gemeldet. Eine beschädigte Bilddatei kann beim eigentlichen Setzen dennoch einen zusätzlichen macOS-Fehler auslösen.
 
-Originale bleiben unverändert in deinem Ordner. Es gibt keine Netzwerkfunktion und keine externen Dienste. Einstellungen und Ordner-Lesezeichen liegen atomar gespeichert unter:
+Originale bleiben unverändert in deinem Ordner. Bilder und Ordnerzuordnungen werden lokal verarbeitet. Ausschließlich die Update-Funktion greift auf GitHub zu; automatische Prüfungen lassen sich abschalten. Einstellungen und Ordner-Lesezeichen liegen atomar gespeichert unter:
 
 ```text
 ~/Library/Application Support/SpacePaper/configuration.json
@@ -168,5 +174,6 @@ Der GitHub-Download ist ad-hoc signiert und nicht notarisiert; dafür gilt die A
 - `Resources/Info.plist`: App-Metadaten und Mindestversion.
 - `Scripts`: SDK-Auswahl, Swift-Builds und Erstellung der Universal-App.
 - `Tools/GenerateIcon.swift`: Erzeugung des App-Icons.
+- `Scripts/prepare-update.sh`, `ReleaseNotes`, `UPDATING.md`: signierte Update-Pakete und Release-Ablauf.
 
 Build-Ergebnisse und lokale Entwicklungsdateien werden über `.gitignore` ausgeschlossen. Fehler und Vorschläge können als [GitHub-Issue](https://github.com/DWegmann/MacSpacesWallpaperManager/issues) gemeldet werden. Bei Problemen mit der Space-Erkennung bitte macOS-Version, Architektur, Bildschirmkonfiguration und eine bereinigte Fehlermeldung angeben.

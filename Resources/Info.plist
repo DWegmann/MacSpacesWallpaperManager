@@ -2,21 +2,54 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleName</key><string>Mac Spaces Wallpaper Manager</string>
-    <key>CFBundleDisplayName</key><string>Mac Spaces Wallpaper Manager</string>
-    <key>CFBundleExecutable</key><string>MacSpacesWallpaperManager</string>
-    <!-- Retain the existing application identity across the rename. -->
-    <key>CFBundleIdentifier</key><string>app.spacepaper.mac</string>
-    <key>CFBundlePackageType</key><string>APPL</string>
-    <key>CFBundleShortVersionString</key><string>1.2.0</string>
-    <key>CFBundleVersion</key><string>4</string>
-    <key>CFBundleDevelopmentRegion</key><string>de</string>
-    <key>CFBundleIconFile</key><string>AppIcon</string>
-    <key>LSMinimumSystemVersion</key><string>13.0</string>
-    <key>LSApplicationCategoryType</key><string>public.app-category.utilities</string>
-    <key>NSHighResolutionCapable</key><true/>
-    <key>NSSupportsAutomaticGraphicsSwitching</key><true/>
-    <key>NSPrincipalClass</key><string>NSApplication</string>
-    <key>NSHumanReadableCopyright</key><string>Mac Spaces Wallpaper Manager · 2026</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>de</string>
+	<key>CFBundleDisplayName</key>
+	<string>Mac Spaces Wallpaper Manager</string>
+	<key>CFBundleExecutable</key>
+	<string>MacSpacesWallpaperManager</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
+	<!-- Retain the existing application identity across the rename. -->
+	<key>CFBundleIdentifier</key>
+	<string>app.spacepaper.mac</string>
+	<key>CFBundleName</key>
+	<string>Mac Spaces Wallpaper Manager</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.3.0</string>
+	<key>CFBundleVersion</key>
+	<string>5</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>13.0</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>Mac Spaces Wallpaper Manager · 2026</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSSupportsAutomaticGraphicsSwitching</key>
+	<true/>
+	<key>SUAllowsAutomaticUpdates</key>
+	<false/>
+	<key>SUAutomaticallyUpdate</key>
+	<false/>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUEnableSystemProfiling</key>
+	<false/>
+	<key>SUFeedURL</key>
+	<string>https://github.com/DWegmann/MacSpacesWallpaperManager/releases/latest/download/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>bCOXDNoEnKT26O2razBbfZ4O22Uny+bmAjpWgLU87Rc=</string>
+	<key>SURequireSignedFeed</key>
+	<true/>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
+	<key>SUVerifyUpdateBeforeExtraction</key>
+	<true/>
 </dict>
 </plist>

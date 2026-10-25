@@ -162,7 +162,9 @@ private struct SidebarView: View {
                 HStack {
                     settingsButton
                     Spacer()
-                    Text("v1.2").font(.system(size: 10, design: .monospaced)).foregroundStyle(.tertiary)
+                    if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
+                        Text("v\(version)").font(.system(size: 10, design: .monospaced)).foregroundStyle(.tertiary)
+                    }
                 }
             }
             .padding(20)
@@ -481,12 +483,12 @@ private struct SpaceDetailView: View {
             .disabled(!rule.enabled)
             if rule.layout == .fit {
                 HStack {
-                    ColorPicker("Hintergrundfarbe", selection: Binding(
+                    ColorPicker("Hintergrundfarbe: \(rule.resolvedBackgroundColor.displayName)", selection: Binding(
                         get: { rule.resolvedBackgroundColor.swiftUIColor },
                         set: { color in model.updateRule(space.id) { $0.backgroundColor = WallpaperColor(color) } }
                     ), supportsOpacity: false)
                     .font(.system(size: 12))
-                    Button("Schwarz") { model.updateRule(space.id) { $0.backgroundColor = .black } }
+                    Button("Auf Schwarz zurücksetzen") { model.updateRule(space.id) { $0.backgroundColor = .black } }
                         .buttonStyle(.link).font(.system(size: 11))
                 }
                 .disabled(!rule.enabled)
