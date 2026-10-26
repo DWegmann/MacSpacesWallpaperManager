@@ -27,5 +27,5 @@ public struct ConfigurationStore {
 
 public enum ConfigurationError: LocalizedError {
     case unsupportedVersion
-    public var errorDescription: String? { "Diese Einstellungen stammen aus einer neueren Version von Mac Spaces Wallpaper Manager." }
+    public var errorDescription: String? { "These settings were created by a newer version of Mac Spaces Wallpaper Manager." }
 }

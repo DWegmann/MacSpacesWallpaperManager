@@ -37,14 +37,14 @@ struct ContentView: View {
                 HStack(alignment: .top, spacing: 8) {
                     NoticeView(text: notice, symbol: "info.circle", warning: true)
                     Button { model.directModeNotice = nil } label: { Image(systemName: "xmark") }
-                        .buttonStyle(.plain).accessibilityLabel("Hinweis schließen").padding(.top, 10)
+                        .buttonStyle(.plain).accessibilityLabel("Dismiss notice").padding(.top, 10)
                 }
                 .padding(.horizontal, 20).padding(.vertical, 8)
             }
             if model.directModeEnabled {
                 HStack(spacing: 8) {
                     Image(systemName: "bolt.horizontal.circle")
-                    Text(model.isApplyingDirect ? "Direktmodus: Hintergründe werden aktualisiert …" : "Direktmodus aktiv · Auch inaktive Desktop-Spaces werden aktualisiert.")
+                    Text(model.isApplyingDirect ? "Direct mode: Updating wallpapers…" : "Direct mode active · Inactive desktop Spaces are also updated.")
                     Spacer()
                 }
                 .font(.system(size: 11)).foregroundStyle(Color.paperAccent)
@@ -53,9 +53,9 @@ struct ContentView: View {
             if model.isPaused {
                 HStack(spacing: 9) {
                     Image(systemName: "pause.circle.fill")
-                    Text("Automatik pausiert. Deine Zuordnungen bleiben gespeichert.")
+                    Text("Automatic rotation paused. Your assignments are saved.")
                     Spacer()
-                    Button("Fortsetzen") { model.togglePaused() }.buttonStyle(.link)
+                    Button("Resume") { model.togglePaused() }.buttonStyle(.link)
                 }
                 .font(.system(size: 12))
                 .padding(12)
@@ -73,10 +73,10 @@ struct ContentView: View {
         VStack(spacing: 18) {
             Image(systemName: "rectangle.on.rectangle.angled")
                 .font(.system(size: 48, weight: .ultraLight)).foregroundStyle(Color.paperAccent)
-            Text("Deine Desktops").font(.system(size: 26, weight: .semibold))
-            Text(model.spaceError ?? "Die verfügbaren Spaces werden ermittelt …")
+            Text("Your desktops").font(.system(size: 26, weight: .semibold))
+            Text(model.spaceError ?? "Detecting available Spaces…")
                 .foregroundStyle(.secondary).multilineTextAlignment(.center).frame(maxWidth: 440)
-            Button("Erneut aktualisieren") { model.refreshSpaces() }.buttonStyle(.bordered)
+            Button("Refresh again") { model.refreshSpaces() }.buttonStyle(.bordered)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -103,25 +103,25 @@ private struct SidebarView: View {
                     Text("Mac Spaces\nWallpaper Manager")
                         .font(.system(size: 14, weight: .semibold))
                         .fixedSize(horizontal: false, vertical: true)
-                    Text("Hintergrundbilder pro Space").font(.system(size: 10)).foregroundStyle(.secondary)
+                    Text("Wallpapers for each Space").font(.system(size: 10)).foregroundStyle(.secondary)
                 }
             }
             .padding(.horizontal, 18).padding(.top, 30).padding(.bottom, 30)
 
             HStack {
-                Text("DEINE SPACES").font(.system(size: 10, weight: .semibold)).tracking(1.3).foregroundStyle(.secondary)
+                Text("YOUR SPACES").font(.system(size: 10, weight: .semibold)).tracking(1.3).foregroundStyle(.secondary)
                 Spacer()
-                Button(model.isSelectingMultipleSpaces ? "Fertig" : "Auswählen") { model.toggleMultipleSelection() }
+                Button(model.isSelectingMultipleSpaces ? "Done" : "Select") { model.toggleMultipleSelection() }
                     .buttonStyle(.plain).font(.system(size: 10, weight: .medium))
                     .foregroundStyle(Color.paperAccent)
-                    .help("Mehrere Spaces gemeinsam bearbeiten")
+                    .help("Edit multiple Spaces together")
                 Button { model.refreshSpaces() } label: { Image(systemName: "arrow.clockwise") }
-                    .buttonStyle(.plain).foregroundStyle(.secondary).help("Spaces aktualisieren (⌘R)")
-                    .accessibilityLabel("Spaces aktualisieren")
+                    .buttonStyle(.plain).foregroundStyle(.secondary).help("Refresh Spaces (⌘R)")
+                    .accessibilityLabel("Refresh Spaces")
             }
             .padding(.horizontal, 20).padding(.bottom, 10)
             if model.isSelectingMultipleSpaces {
-                Text("\(model.selectedSpaceIDs.count) ausgewählt")
+                Text("\(model.selectedSpaceIDs.count) selected")
                     .font(.system(size: 10)).foregroundStyle(.secondary)
                     .padding(.horizontal, 20).padding(.bottom, 10)
             }
@@ -134,9 +134,9 @@ private struct SidebarView: View {
                                 Label(display.name, systemImage: "display").lineLimit(1)
                                 Spacer(minLength: 4)
                                 if model.isSelectingMultipleSpaces {
-                                    Button("Alle") { model.selectAllSpaces(on: display.id) }
+                                    Button("All") { model.selectAllSpaces(on: display.id) }
                                         .buttonStyle(.plain).foregroundStyle(Color.paperAccent)
-                                        .accessibilityLabel("Alle Spaces auf \(display.name) auswählen")
+                                        .accessibilityLabel("Select all Spaces on \(display.name)")
                                 }
                             }
                             .font(.system(size: 11)).foregroundStyle(.secondary)
@@ -154,10 +154,10 @@ private struct SidebarView: View {
                 Divider()
                 HStack(spacing: 7) {
                     Circle().fill(model.isPaused ? .orange : Color.paperAccent).frame(width: 6, height: 6)
-                    Text(model.isPaused ? "Automatik pausiert" : "\(model.configuredCount) \(model.configuredCount == 1 ? "Space" : "Spaces") eingerichtet")
+                    Text(model.isPaused ? "Automatic rotation paused" : "\(model.configuredCount) \(model.configuredCount == 1 ? "Space" : "Spaces") configured")
                         .font(.system(size: 11)).foregroundStyle(.secondary)
                 }
-                Text("Bleibt in der Menüleiste für dich aktiv.")
+                Text("Stays active in the menu bar.")
                     .font(.system(size: 10)).foregroundStyle(.tertiary)
                 HStack {
                     settingsButton
@@ -194,7 +194,7 @@ private struct SidebarView: View {
                 .frame(width: 39, height: 34)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(space.title).font(.system(size: 13, weight: selected ? .semibold : .medium))
-                    Text(rule.folderPath.map { URL(fileURLWithPath: $0).lastPathComponent } ?? "Noch kein Ordner")
+                    Text(rule.folderPath.map { URL(fileURLWithPath: $0).lastPathComponent } ?? "No folder yet")
                         .font(.system(size: 10)).foregroundStyle(.secondary).lineLimit(1)
                 }
                 Spacer(minLength: 0)
@@ -207,17 +207,17 @@ private struct SidebarView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("\(space.title), \(space.isVisible ? "sichtbar" : "inaktiv"), \(rule.folderPath == nil ? "kein Ordner" : "Ordner zugeordnet")")
+        .accessibilityLabel("\(space.title), \(space.isVisible ? "visible" : "inactive"), \(rule.folderPath == nil ? "no folder" : "folder assigned")")
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 
     @ViewBuilder private var settingsButton: some View {
         if #available(macOS 14, *) {
-            SettingsLink { Label("Einstellungen", systemImage: "gearshape") }
+            SettingsLink { Label("Settings", systemImage: "gearshape") }
                 .buttonStyle(.plain).font(.system(size: 11)).foregroundStyle(.secondary)
         } else {
             Button { NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil) } label: {
-                Label("Einstellungen", systemImage: "gearshape")
+                Label("Settings", systemImage: "gearshape")
             }
             .buttonStyle(.plain).font(.system(size: 11)).foregroundStyle(.secondary)
         }
@@ -258,22 +258,22 @@ private struct SpaceDetailView: View {
         }
         .background(Color(nsColor: .windowBackgroundColor))
         .disabled(!model.isWritable)
-        .confirmationDialog("Ordnerzuordnung für \(space.title) entfernen?", isPresented: $showRemoveConfirmation, titleVisibility: .visible) {
-            Button("Zuordnung entfernen", role: .destructive) { model.removeFolder(for: space.id) }
+        .confirmationDialog("Remove folder assignment for \(space.title)?", isPresented: $showRemoveConfirmation, titleVisibility: .visible) {
+            Button("Remove assignment", role: .destructive) { model.removeFolder(for: space.id) }
         } message: {
-            Text("Deine Bilder und das zuletzt gesetzte Hintergrundbild bleiben erhalten.")
+            Text("Your images and the last wallpaper applied will be kept.")
         }
     }
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .center) {
-                Text("Dein Space. Deine Aussicht.")
+                Text("Your Space. Your view.")
                     .font(.system(size: 11, weight: .medium)).tracking(0.3).foregroundStyle(.secondary)
                 Spacer()
                 HStack(spacing: 5) {
                     Circle().fill(space.isVisible ? Color.paperAccent : .secondary).frame(width: 5, height: 5)
-                    Text(space.isVisible ? "Gerade sichtbar" : "Inaktiver Space")
+                    Text(space.isVisible ? "Currently visible" : "Inactive Space")
                         .font(.system(size: 10, weight: .medium))
                 }
                 .foregroundStyle(space.isVisible ? Color.paperAccent : .secondary)
@@ -285,7 +285,7 @@ private struct SpaceDetailView: View {
                 Spacer()
                 Text(space.display.name).font(.system(size: 11)).foregroundStyle(.secondary)
             }
-            Text("Ein eigener Bilderordner für diesen Desktop.")
+            Text("A separate image folder for this desktop.")
                 .font(.system(size: 13)).foregroundStyle(.secondary)
         }
     }
@@ -297,7 +297,7 @@ private struct SpaceDetailView: View {
                 .overlay(alignment: .bottomLeading) {
                     HStack(spacing: 5) {
                         Image(systemName: "sparkle")
-                        Text("Platz für einen neuen Blickwinkel")
+                        Text("Room for a fresh perspective")
                     }
                     .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(.white.opacity(0.9)).padding(20)
@@ -305,20 +305,20 @@ private struct SpaceDetailView: View {
             VStack(spacing: 14) {
                 Image(systemName: "folder.badge.plus")
                     .font(.system(size: 32, weight: .light)).foregroundStyle(Color.paperAccent)
-                Text("Deine Bilder machen den Unterschied.")
+                Text("Make it yours with your images.")
                     .font(.system(size: 20, weight: .semibold))
-                Text("Wähle einen Ordner mit deinen Lieblingsbildern.\nAuf Wunsch werden auch Bilder in Unterordnern gefunden.")
+                Text("Choose a folder with your favorite images.\nYou can include images in subfolders, too.")
                     .font(.system(size: 13)).foregroundStyle(.secondary)
                     .multilineTextAlignment(.center).lineSpacing(4)
                 Button { model.chooseFolder(for: space.id) } label: {
-                    Label("Bilderordner auswählen", systemImage: "folder")
+                    Label("Choose image folder", systemImage: "folder")
                         .padding(.horizontal, 12).padding(.vertical, 5)
                 }
                 .buttonStyle(.borderedProminent).controlSize(.large)
                 .padding(.top, 5)
                 HStack(spacing: 18) {
-                    Label("Rekursiv durchsuchbar", systemImage: "folder.badge.gearshape")
-                    Label("Lokal auf deinem Mac", systemImage: "internaldrive")
+                    Label("Search subfolders", systemImage: "folder.badge.gearshape")
+                    Label("Local to your Mac", systemImage: "internaldrive")
                 }
                 .font(.system(size: 10)).foregroundStyle(.tertiary).padding(.top, 7)
             }
@@ -380,23 +380,23 @@ private struct SpaceDetailView: View {
             .shadow(color: .black.opacity(0.12), radius: 12, y: 6)
 
             VStack(alignment: .leading, spacing: 11) {
-                Text("BILDVORSCHAU")
+                Text("IMAGE PREVIEW")
                     .font(.system(size: 9, weight: .semibold)).tracking(1.0).foregroundStyle(.secondary)
-                Text(image?.deletingPathExtension().lastPathComponent ?? "Bilder werden eingelesen")
+                Text(image?.deletingPathExtension().lastPathComponent ?? "Scanning images")
                     .font(.system(size: 17, weight: .medium)).lineLimit(2)
                 if !space.isVisible && !model.directModeEnabled {
-                    Text("Wird beim nächsten Besuch dieses Spaces angewendet.")
+                    Text("Will be applied the next time you visit this Space.")
                         .font(.system(size: 11)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
                 } else if let lastDate = rule.lastAppliedAt {
-                    Text("Zuletzt gesetzt: \(lastDate.formatted(date: .omitted, time: .shortened))")
+                    Text("Last applied: \(lastDate.formatted(date: .omitted, time: .shortened))")
                         .font(.system(size: 11)).foregroundStyle(.secondary)
                 }
                 Button { model.nextImage(for: space.id) } label: {
-                    Label("Nächstes Bild", systemImage: "arrow.right")
+                    Label("Next image", systemImage: "arrow.right")
                 }
                 .buttonStyle(.bordered).controlSize(.regular)
                 .disabled(library.images.isEmpty || model.isPaused || !rule.enabled)
-                Button(space.isVisible || model.directModeEnabled ? "Hintergrund anwenden" : "Für nächsten Besuch vormerken") { model.applySelected(space.id) }
+                Button(space.isVisible || model.directModeEnabled ? "Apply wallpaper" : "Queue for next visit") { model.applySelected(space.id) }
                     .buttonStyle(.link).font(.system(size: 11))
                     .disabled(library.images.isEmpty || model.isPaused || !rule.enabled)
             }
@@ -410,36 +410,36 @@ private struct SpaceDetailView: View {
             HStack(spacing: 12) {
                 Image(systemName: "folder.fill").font(.system(size: 27)).foregroundStyle(Color.paperAccent.opacity(0.7))
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(rule.folderPath.map { URL(fileURLWithPath: $0).lastPathComponent } ?? "Bilderordner")
+                    Text(rule.folderPath.map { URL(fileURLWithPath: $0).lastPathComponent } ?? "Image folder")
                         .font(.system(size: 14, weight: .semibold))
                     Text(rule.folderPath ?? "").font(.system(size: 10)).foregroundStyle(.secondary)
                         .lineLimit(1).truncationMode(.middle).help(rule.folderPath ?? "")
                 }
                 Spacer(minLength: 5)
-                Button("Ändern …") { model.chooseFolder(for: space.id) }.controlSize(.small)
+                Button("Change…") { model.chooseFolder(for: space.id) }.controlSize(.small)
                 Menu {
-                    Button("Im Finder öffnen") { model.revealFolder(space.id) }
-                    Button("Ordner neu einlesen") { model.scan(space.id); thumbnailRefresh += 1 }
+                    Button("Open in Finder") { model.revealFolder(space.id) }
+                    Button("Rescan folder") { model.scan(space.id); thumbnailRefresh += 1 }
                     Divider()
-                    Button("Zuordnung entfernen …", role: .destructive) { showRemoveConfirmation = true }
+                    Button("Remove assignment…", role: .destructive) { showRemoveConfirmation = true }
                 } label: { Image(systemName: "ellipsis") }
                 .menuStyle(.borderlessButton).frame(width: 18)
-                .accessibilityLabel("Ordneraktionen")
+                .accessibilityLabel("Folder actions")
             }
             Divider()
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Toggle("Unterordner einbeziehen", isOn: binding(\.recursive)).toggleStyle(.checkbox)
+                    Toggle("Include subfolders", isOn: binding(\.recursive)).toggleStyle(.checkbox)
                         .font(.system(size: 12))
-                    Text("Durchsucht den gewählten Ordner rekursiv.")
+                    Text("Searches the selected folder recursively.")
                         .font(.system(size: 10)).foregroundStyle(.secondary).padding(.leading, 20)
                 }
                 Spacer()
                 if library.isScanning {
                     ProgressView().controlSize(.small)
-                    Text("Wird eingelesen …").font(.system(size: 11)).foregroundStyle(.secondary)
+                    Text("Scanning…").font(.system(size: 11)).foregroundStyle(.secondary)
                 } else {
-                    Label("\(library.images.count) \(library.images.count == 1 ? "Bild" : "Bilder")", systemImage: "photo.stack")
+                    Label("\(library.images.count) \(library.images.count == 1 ? "image" : "images")", systemImage: "photo.stack")
                         .font(.system(size: 11, weight: .medium)).foregroundStyle(Color.paperAccent)
                         .padding(.horizontal, 10).padding(.vertical, 6)
                         .background(Color.paperAccent.opacity(0.07), in: Capsule())
@@ -447,7 +447,7 @@ private struct SpaceDetailView: View {
             }
             if let error = library.error {
                 NoticeView(text: error, symbol: "exclamationmark.triangle", warning: true)
-                Button("Erneut einlesen") { model.scan(space.id) }.font(.system(size: 11))
+                Button("Scan again") { model.scan(space.id) }.font(.system(size: 11))
             } else if let notice = library.notice {
                 NoticeView(text: notice, symbol: "info.circle", warning: false)
             }
@@ -458,23 +458,23 @@ private struct SpaceDetailView: View {
     private var behaviorCard: some View {
         VStack(alignment: .leading, spacing: 15) {
             HStack {
-                Label("So wechselt dein Hintergrund", systemImage: "slider.horizontal.3")
+                Label("Wallpaper behavior", systemImage: "slider.horizontal.3")
                     .font(.system(size: 13, weight: .semibold))
                 Spacer()
-                Toggle("Aktiv", isOn: binding(\.enabled)).toggleStyle(.switch).controlSize(.mini)
+                Toggle("Enabled", isOn: binding(\.enabled)).toggleStyle(.switch).controlSize(.mini)
                     .font(.system(size: 11)).fixedSize()
             }
             HStack(alignment: .top, spacing: 20) {
                 VStack(alignment: .leading, spacing: 7) {
-                    Text("BILD WECHSELN").font(.system(size: 9, weight: .medium)).tracking(0.7).foregroundStyle(.secondary)
-                    Picker("Bild wechseln", selection: binding(\.rotation)) {
+                    Text("CHANGE IMAGE").font(.system(size: 9, weight: .medium)).tracking(0.7).foregroundStyle(.secondary)
+                    Picker("Change image", selection: binding(\.rotation)) {
                         ForEach(RotationMode.allCases, id: \.self) { Text($0.title).tag($0) }
                     }
                     .labelsHidden().frame(maxWidth: .infinity)
                 }
                 VStack(alignment: .leading, spacing: 7) {
-                    Text("DARSTELLUNG").font(.system(size: 9, weight: .medium)).tracking(0.7).foregroundStyle(.secondary)
-                    Picker("Darstellung", selection: binding(\.layout)) {
+                    Text("IMAGE SCALING").font(.system(size: 9, weight: .medium)).tracking(0.7).foregroundStyle(.secondary)
+                    Picker("Image scaling", selection: binding(\.layout)) {
                         ForEach(ImageLayout.allCases, id: \.self) { Text($0.title).tag($0) }
                     }
                     .labelsHidden().frame(maxWidth: .infinity)
@@ -483,23 +483,23 @@ private struct SpaceDetailView: View {
             .disabled(!rule.enabled)
             if rule.layout == .fit {
                 HStack {
-                    ColorPicker("Hintergrundfarbe: \(rule.resolvedBackgroundColor.displayName)", selection: Binding(
+                    ColorPicker("Background color: \(rule.resolvedBackgroundColor.displayName)", selection: Binding(
                         get: { rule.resolvedBackgroundColor.swiftUIColor },
                         set: { color in model.updateRule(space.id) { $0.backgroundColor = WallpaperColor(color) } }
                     ), supportsOpacity: false)
                     .font(.system(size: 12))
-                    Button("Auf Schwarz zurücksetzen") { model.updateRule(space.id) { $0.backgroundColor = .black } }
+                    Button("Reset to Black") { model.updateRule(space.id) { $0.backgroundColor = .black } }
                         .buttonStyle(.link).font(.system(size: 11))
                 }
                 .disabled(!rule.enabled)
-                Text("Füllt die freien Flächen neben oder über dem angepassten Bild.")
+                Text("Fills the unused area beside or above the fitted image.")
                     .font(.system(size: 10)).foregroundStyle(.secondary)
             }
             HStack {
-                Toggle("Zufällige Reihenfolge", isOn: binding(\.shuffle))
+                Toggle("Random order", isOn: binding(\.shuffle))
                     .toggleStyle(.checkbox).font(.system(size: 11))
                 Spacer()
-                Text("Ohne direkte Wiederholung").font(.system(size: 10)).foregroundStyle(.tertiary)
+                Text("No immediate repeats").font(.system(size: 10)).foregroundStyle(.tertiary)
             }
             .disabled(!rule.enabled)
         }
@@ -509,19 +509,19 @@ private struct SpaceDetailView: View {
     private var gallery: some View {
         VStack(alignment: .leading, spacing: 13) {
             HStack {
-                Text("Bilder im Ordner").font(.system(size: 14, weight: .semibold))
+                Text("Images in folder").font(.system(size: 14, weight: .semibold))
                 Spacer()
-                Text("Klicken zum Auswählen").font(.system(size: 10)).foregroundStyle(.secondary)
+                Text("Click to select").font(.system(size: 10)).foregroundStyle(.secondary)
                 Button { model.scan(space.id); thumbnailRefresh += 1 } label: { Image(systemName: "arrow.clockwise") }
                     .buttonStyle(.plain).foregroundStyle(.secondary)
-                    .disabled(library.isScanning).help("Ordner neu einlesen")
-                    .accessibilityLabel("Ordner neu einlesen")
+                    .disabled(library.isScanning).help("Rescan folder")
+                    .accessibilityLabel("Rescan folder")
             }
             if library.images.isEmpty && !library.isScanning && library.error == nil {
                 VStack(spacing: 9) {
                     Image(systemName: "photo.on.rectangle.angled").font(.system(size: 24, weight: .light))
-                    Text("Hier wurden noch keine lesbaren Bilder gefunden.")
-                    Text("Wähle einen anderen Ordner oder beziehe Unterordner ein.")
+                    Text("No readable images found here yet.")
+                    Text("Choose another folder or include subfolders.")
                         .font(.system(size: 11))
                 }
                 .foregroundStyle(.secondary).font(.system(size: 12))
@@ -533,7 +533,7 @@ private struct SpaceDetailView: View {
                     }
                 }
                 if library.images.count > galleryLimit {
-                    Button("Weitere Bilder anzeigen (\(library.images.count - galleryLimit))") { galleryLimit += 60 }
+                    Button("Show more images (\(library.images.count - galleryLimit))") { galleryLimit += 60 }
                         .buttonStyle(.bordered).frame(maxWidth: .infinity)
                 }
             }
@@ -564,15 +564,15 @@ private struct SpaceDetailView: View {
         .buttonStyle(.plain)
         .disabled(!rule.enabled)
         .help(url.lastPathComponent)
-        .accessibilityLabel("\(url.lastPathComponent)\(selected ? ", ausgewählt" : "")")
+        .accessibilityLabel("\(url.lastPathComponent)\(selected ? ", selected" : "")")
     }
 
     private var footer: some View {
         HStack(alignment: .top, spacing: 7) {
             Image(systemName: "info.circle").font(.system(size: 10))
             Text(model.directModeEnabled
-                 ? "Der Direktmodus aktualisiert auch inaktive Desktop-Spaces. Beim Bildwechsel kann der Hintergrund kurz flackern. Vollbild-Spaces bleiben unverändert."
-                 : "Inaktive Spaces werden beim nächsten Besuch aktualisiert. Vollbild-Spaces bleiben unverändert.")
+                 ? "Direct mode also updates inactive desktop Spaces. The wallpaper may briefly flicker when changing images. Full-screen Spaces remain unchanged."
+                 : "Inactive Spaces are updated the next time you visit them. Full-screen Spaces remain unchanged.")
                 .font(.system(size: 10)).fixedSize(horizontal: false, vertical: true)
         }
         .foregroundStyle(.tertiary)

@@ -42,11 +42,11 @@ struct BulkSpaceSettingsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Mehrere Spaces gemeinsam einrichten")
+                    Text("Set up multiple Spaces together")
                         .font(.system(size: 11, weight: .medium)).foregroundStyle(.secondary)
-                    Text("\(model.selectedSpaces.count) \(model.selectedSpaces.count == 1 ? "Space ausgewählt" : "Spaces ausgewählt")")
+                    Text("\(model.selectedSpaces.count) \(model.selectedSpaces.count == 1 ? "Space selected" : "Spaces selected")")
                         .font(.system(size: 28, weight: .semibold, design: .rounded))
-                    Text("Wähle links die Spaces aus. Nur angehakte Einstellungen werden übernommen.")
+                    Text("Select Spaces on the left. Only checked settings will be applied.")
                         .font(.system(size: 12)).foregroundStyle(.secondary)
                 }
                 selectionCard
@@ -65,15 +65,15 @@ struct BulkSpaceSettingsView: View {
     private var selectionCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Label("Ausgewählte Spaces", systemImage: "checklist")
+                Label("Selected Spaces", systemImage: "checklist")
                     .font(.system(size: 13, weight: .semibold))
                 Spacer()
-                Button("Alle auswählen") { model.selectAllSpaces() }.buttonStyle(.link)
-                Button("Auswahl leeren") { model.clearSpaceSelection() }.buttonStyle(.link)
+                Button("Select all") { model.selectAllSpaces() }.buttonStyle(.link)
+                Button("Clear selection") { model.clearSpaceSelection() }.buttonStyle(.link)
             }
             .font(.system(size: 11))
             if model.selectedSpaces.isEmpty {
-                Text("Noch keine Spaces ausgewählt.").font(.system(size: 12)).foregroundStyle(.secondary)
+                Text("No Spaces selected yet.").font(.system(size: 12)).foregroundStyle(.secondary)
             } else {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 6) {
@@ -92,22 +92,22 @@ struct BulkSpaceSettingsView: View {
 
     private var folderCard: some View {
         VStack(alignment: .leading, spacing: 18) {
-            field("Bilderordner ändern", selected: $draft.changeFolder) {
+            field("Change image folder", selected: $draft.changeFolder) {
                 HStack(spacing: 12) {
                     Image(systemName: "folder.fill").foregroundStyle(Color.paperAccent)
-                    Text(draft.folderURL?.path ?? "Kein gemeinsamer Ordner ausgewählt")
+                    Text(draft.folderURL?.path ?? "No shared folder selected")
                         .font(.system(size: 11)).foregroundStyle(.secondary)
                         .lineLimit(1).truncationMode(.middle)
                     Spacer(minLength: 5)
-                    Button(draft.folderURL == nil ? "Ordner auswählen …" : "Ändern …") {
+                    Button(draft.folderURL == nil ? "Choose folder…" : "Change…") {
                         model.chooseBulkFolder { draft.folderURL = $0; resultMessage = nil }
                     }
                     .controlSize(.small)
                 }
             }
             Divider()
-            field("Unterordner-Einstellung ändern", selected: $draft.changeRecursive) {
-                Toggle("Unterordner einbeziehen", isOn: $draft.recursive).toggleStyle(.checkbox)
+            field("Change subfolder setting", selected: $draft.changeRecursive) {
+                Toggle("Include subfolders", isOn: $draft.recursive).toggleStyle(.checkbox)
                     .font(.system(size: 12))
             }
         }
@@ -116,33 +116,33 @@ struct BulkSpaceSettingsView: View {
 
     private var behaviorCard: some View {
         VStack(alignment: .leading, spacing: 18) {
-            field("Bildwechsel ändern", selected: $draft.changeRotation) {
-                Picker("Bild wechseln", selection: $draft.rotation) {
+            field("Change rotation", selected: $draft.changeRotation) {
+                Picker("Change image", selection: $draft.rotation) {
                     ForEach(RotationMode.allCases, id: \.self) { Text($0.title).tag($0) }
                 }
                 .frame(maxWidth: 350)
             }
             Divider()
-            field("Darstellung ändern", selected: $draft.changeLayout) {
-                Picker("Darstellung", selection: $draft.layout) {
+            field("Change image scaling", selected: $draft.changeLayout) {
+                Picker("Image scaling", selection: $draft.layout) {
                     ForEach(ImageLayout.allCases, id: \.self) { Text($0.title).tag($0) }
                 }
                 .frame(maxWidth: 350)
             }
             Divider()
-            field("Hintergrundfarbe ändern", selected: $draft.changeColor) {
-                ColorPicker("Farbe: \(WallpaperColor(draft.color).displayName)", selection: $draft.color, supportsOpacity: false)
+            field("Change background color", selected: $draft.changeColor) {
+                ColorPicker("Color: \(WallpaperColor(draft.color).displayName)", selection: $draft.color, supportsOpacity: false)
                     .frame(maxWidth: 350)
-                Text("Wird bei „An Bildschirm anpassen“ für die freien Flächen verwendet.")
+                Text("Used for unused areas when “Fit to screen” is selected.")
                     .font(.system(size: 10)).foregroundStyle(.secondary)
             }
             Divider()
-            field("Reihenfolge ändern", selected: $draft.changeShuffle) {
-                Toggle("Zufällige Reihenfolge", isOn: $draft.shuffle).toggleStyle(.checkbox)
+            field("Change order", selected: $draft.changeShuffle) {
+                Toggle("Random order", isOn: $draft.shuffle).toggleStyle(.checkbox)
             }
             Divider()
-            field("Aktivierung ändern", selected: $draft.changeEnabled) {
-                Toggle("Hintergründe für diese Spaces aktivieren", isOn: $draft.enabled).toggleStyle(.checkbox)
+            field("Change enabled status", selected: $draft.changeEnabled) {
+                Toggle("Enable wallpapers for these Spaces", isOn: $draft.enabled).toggleStyle(.checkbox)
             }
         }
         .font(.system(size: 12))
@@ -158,20 +158,20 @@ struct BulkSpaceSettingsView: View {
             HStack {
                 Button {
                     let count = model.applyBulkChanges(draft.changes, folderURL: draft.changeFolder ? draft.folderURL : nil)
-                    if count > 0 { resultMessage = "Einstellungen für \(count) \(count == 1 ? "Space" : "Spaces") gespeichert." }
+                    if count > 0 { resultMessage = "Settings saved for \(count) \(count == 1 ? "Space" : "Spaces")." }
                 } label: {
-                    Text("Auf \(model.selectedSpaces.count) \(model.selectedSpaces.count == 1 ? "Space" : "Spaces") anwenden")
+                    Text("Apply to \(model.selectedSpaces.count) \(model.selectedSpaces.count == 1 ? "Space" : "Spaces")")
                         .padding(.horizontal, 10).padding(.vertical, 4)
                 }
                 .buttonStyle(.borderedProminent).controlSize(.large)
                 .disabled(!draft.canApply || model.selectedSpaces.isEmpty || !model.isWritable || model.isApplyingDirect)
                 Spacer()
-                Button("Mehrfachauswahl beenden") { model.toggleMultipleSelection() }.buttonStyle(.link)
+                Button("Exit multiple selection") { model.toggleMultipleSelection() }.buttonStyle(.link)
                     .font(.system(size: 11))
             }
             Text(model.directModeEnabled
-                 ? "Der Direktmodus berücksichtigt auch inaktive Desktop-Spaces. Beim Bildwechsel kann der Hintergrund kurz flackern."
-                 : "Im Standardmodus werden inaktive Spaces beim nächsten Besuch aktualisiert.")
+                 ? "Direct mode also updates inactive desktop Spaces. The wallpaper may briefly flicker when changing images."
+                 : "In standard mode, inactive Spaces are updated the next time you visit them.")
                 .font(.system(size: 10)).foregroundStyle(.secondary)
         }
         .padding(18).bulkCard()

@@ -20,12 +20,12 @@ struct MacSpacesWallpaperManagerApp: App {
                 CheckForUpdatesButton(updates: updates)
             }
             CommandGroup(replacing: .newItem) {}
-            CommandMenu("Hintergrundbilder") {
-                Button("Nächstes Bild für sichtbare Spaces") { model.nextVisibleImages() }
+            CommandMenu("Wallpapers") {
+                Button("Next image for visible Spaces") { model.nextVisibleImages() }
                     .keyboardShortcut("n", modifiers: [.command, .shift])
-                Button(model.isPaused ? "Automatik fortsetzen" : "Automatik pausieren") { model.togglePaused() }
+                Button(model.isPaused ? "Resume automatic rotation" : "Pause automatic rotation") { model.togglePaused() }
                 Divider()
-                Button("Spaces aktualisieren") { model.refreshSpaces() }
+                Button("Refresh Spaces") { model.refreshSpaces() }
                     .keyboardShortcut("r", modifiers: [.command])
             }
         }
@@ -76,24 +76,24 @@ private struct MenuBarView: View {
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
-        Text("Mac Spaces Wallpaper Manager · \(model.isPaused ? "pausiert" : "aktiv")")
-        if model.directModeEnabled { Text("Direktmodus für alle Desktop-Spaces") }
+        Text("Mac Spaces Wallpaper Manager · \(model.isPaused ? "paused" : "active")")
+        if model.directModeEnabled { Text("Direct mode for all desktop Spaces") }
         Divider()
-        Button("Mac Spaces Wallpaper Manager öffnen") {
+        Button("Open Mac Spaces Wallpaper Manager") {
             openWindow(id: "main")
             showMainWindow()
         }
-        Button("Nächstes Hintergrundbild") { model.nextVisibleImages() }
+        Button("Next wallpaper") { model.nextVisibleImages() }
             .disabled(model.isPaused || model.configuredCount == 0)
-        Button(model.isPaused ? "Automatik fortsetzen" : "Automatik pausieren") { model.togglePaused() }
+        Button(model.isPaused ? "Resume automatic rotation" : "Pause automatic rotation") { model.togglePaused() }
         Divider()
         ForEach(model.spaces.filter(\.isVisible)) { space in
             Text("\(space.title) · \(space.display.name)")
-            Text("Aktuelles Bild: \(model.currentImageURL(for: space)?.lastPathComponent ?? "Nicht verfügbar")")
+            Text("Current image: \(model.currentImageURL(for: space)?.lastPathComponent ?? "Not available")")
         }
         Divider()
         CheckForUpdatesButton(updates: updates)
-        Button("Beenden") { NSApp.terminate(nil) }.keyboardShortcut("q")
+        Button("Quit") { NSApp.terminate(nil) }.keyboardShortcut("q")
     }
 }
 
@@ -104,72 +104,72 @@ private struct SettingsView: View {
 
     var body: some View {
         Form {
-            Section("Allgemein") {
-                Toggle("Bei der Anmeldung öffnen", isOn: Binding(
+            Section("General") {
+                Toggle("Open at login", isOn: Binding(
                     get: { model.launchAtLogin }, set: { model.setLaunchAtLogin($0) }
                 ))
                 if model.loginNeedsApproval {
-                    Text("Bitte bestätige Mac Spaces Wallpaper Manager unter Systemeinstellungen → Allgemein → Anmeldeobjekte.")
+                    Text("Please approve Mac Spaces Wallpaper Manager in System Settings → General → Login Items.")
                         .font(.caption).foregroundStyle(.secondary)
                 }
-                Text("Nach dem Schließen des Fensters läuft die App in der Menüleiste weiter.")
+                Text("The app keeps running in the menu bar after you close the window.")
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section("Updates") {
-                Toggle("Automatisch nach Updates suchen", isOn: Binding(
+                Toggle("Automatically check for updates", isOn: Binding(
                     get: { updates.automaticallyChecksForUpdates },
                     set: { updates.setAutomaticallyChecksForUpdates($0) }
                 ))
                 .disabled(updates.startupError != nil)
                 CheckForUpdatesButton(updates: updates)
-                Text("Prüft täglich über GitHub auf neue Versionen. Download und Installation startest du per Klick; anschließend wird die App neu gestartet.")
+                Text("Checks GitHub daily for new versions. Click to start the download and installation; the app will then restart.")
                     .font(.caption).foregroundStyle(.secondary)
                 if let error = updates.startupError {
                     Text(error).font(.caption).foregroundStyle(.secondary)
                 }
             }
             Section("Spaces") {
-                Text("Jeder Desktop erhält seinen eigenen Bilderordner. Im Standardmodus wird ein inaktiver Desktop beim nächsten Besuch aktualisiert. Vollbild-Spaces werden ausgelassen.")
-                Text("Die Space-Erkennung verwendet eine nicht öffentliche macOS-Schnittstelle. Nach einem macOS-Update kann eine Anpassung nötig sein.")
+                Text("Each desktop has its own image folder. In standard mode, inactive desktops are updated the next time you visit them. Full-screen Spaces are skipped.")
+                Text("Space detection uses a private macOS interface. It may need adjustment after a macOS update.")
                     .font(.caption).foregroundStyle(.secondary)
             }
-            Section("Direktmodus (experimentell)") {
-                Toggle("Auch inaktive Spaces sofort aktualisieren", isOn: Binding(
+            Section("Direct mode (experimental)") {
+                Toggle("Update inactive Spaces immediately", isOn: Binding(
                     get: { model.directModeEnabled }, set: { model.setDirectMode($0) }
                 ))
                 .disabled(!model.directModeAvailable || !model.isWritable || model.isApplyingDirect)
-                Text("Verwendet einen inoffiziellen macOS-Speicherzugriff. Vor jeder Änderung wird eine Sicherung erstellt und der Hintergrunddienst neu gestartet. Nach macOS-Updates kann eine Anpassung nötig sein.")
+                Text("Uses an unofficial method to access the macOS wallpaper store. Creates a backup before each change and restarts the wallpaper service afterward. It may need adjustment after macOS updates.")
                     .font(.caption).foregroundStyle(.secondary)
-                Label("Beim Bildwechsel kann der Hintergrund kurz flackern.", systemImage: "exclamationmark.triangle")
+                Label("The wallpaper may briefly flicker when changing images.", systemImage: "exclamationmark.triangle")
                     .font(.caption).foregroundStyle(.secondary)
                 if !model.directModeAvailable {
-                    Text("Benötigt macOS 14 oder neuer und eine lesbare Hintergrund-Konfiguration.")
+                    Text("Requires macOS 14 or later and a readable wallpaper configuration.")
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 if model.isApplyingDirect {
-                    HStack { ProgressView().controlSize(.small); Text("Hintergründe werden aktualisiert …").font(.caption) }
+                    HStack { ProgressView().controlSize(.small); Text("Updating wallpapers…").font(.caption) }
                 }
                 if let backup = model.lastDirectBackup {
-                    Text("Letzte Sicherung: \(backup.createdAt.formatted(date: .abbreviated, time: .shortened)) · \(backup.changeCount) Zuordnung(en)")
+                    Text("Last backup: \(backup.createdAt.formatted(date: .abbreviated, time: .shortened)) · \(backup.changeCount) \(backup.changeCount == 1 ? "assignment" : "assignments")")
                         .font(.caption).foregroundStyle(.secondary)
-                    Button("Letzte Direktmodus-Änderung rückgängig machen …") { showRestoreConfirmation = true }
+                    Button("Undo last direct-mode change…") { showRestoreConfirmation = true }
                         .disabled(!model.canRestoreDirectBackup || !model.isWritable)
-                    Button("Sicherungen im Finder zeigen") { model.showDirectBackups() }
+                    Button("Show backups in Finder") { model.showDirectBackups() }
                 }
                 if let notice = model.directModeNotice { Text(notice).font(.caption).foregroundStyle(.secondary) }
             }
-            Section("Daten") {
-                Text("Bilder bleiben in deinem Ordner. Zuordnungen werden lokal auf diesem Mac gespeichert.")
-                Button("Einstellungsdatei im Finder zeigen") { model.showConfigurationFile() }
+            Section("Data") {
+                Text("Images stay in your folder. Assignments are saved locally on this Mac.")
+                Button("Show configuration file in Finder") { model.showConfigurationFile() }
             }
         }
         .formStyle(.grouped)
         .frame(width: 550, height: 660)
         .onAppear { model.updateLoginStatus(); model.refreshDirectBackup() }
-        .confirmationDialog("Letzte Direktmodus-Änderung zurücknehmen?", isPresented: $showRestoreConfirmation, titleVisibility: .visible) {
-            Button("Gesicherte Hintergründe wiederherstellen") { model.restoreDirectBackup() }
+        .confirmationDialog("Undo the last direct-mode change?", isPresented: $showRestoreConfirmation, titleVisibility: .visible) {
+            Button("Restore backed-up wallpapers") { model.restoreDirectBackup() }
         } message: {
-            Text("Nur die zuletzt von der App geänderten Hintergründe werden zurückgesetzt. Die Automatik wird dabei pausiert. Wurde ein betroffener Hintergrund inzwischen außerhalb der App geändert, wird die Wiederherstellung abgebrochen.")
+            Text("Only the wallpapers last changed by the app will be restored. Automatic rotation will be paused. If an affected wallpaper has since changed outside the app, restoration will be canceled.")
         }
     }
 }

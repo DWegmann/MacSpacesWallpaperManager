@@ -70,10 +70,10 @@ final class AppModel: ObservableObject {
         guard !started else { return }
         started = true
         do { configuration = try store.load() }
-        catch { persistenceError = "Die Einstellungen konnten nicht geladen werden: \(error.localizedDescription) Die vorhandene Datei bleibt erhalten." }
+        catch { persistenceError = "Could not load settings: \(error.localizedDescription) The existing file will be preserved." }
         if directModeEnabled && !directModeAvailable {
             configuration.directWallpaperMode = false
-            directModeNotice = "Der Direktmodus ist auf diesem Mac nicht verfügbar. Der Standardmodus bleibt aktiv."
+            directModeNotice = "Direct mode is not available on this Mac. Standard mode remains active."
             save()
         }
         refreshDirectBackup()
@@ -174,9 +174,9 @@ final class AppModel: ObservableObject {
 
     func chooseBulkFolder(_ completion: @escaping (URL) -> Void) {
         let panel = NSOpenPanel()
-        panel.title = "Gemeinsamen Bilderordner auswählen"
-        panel.message = "Der Ordner wird nach „Anwenden“ den ausgewählten Spaces zugeordnet."
-        panel.prompt = "Ordner auswählen"
+        panel.title = "Choose shared image folder"
+        panel.message = "The folder will be assigned to the selected Spaces when you click Apply."
+        panel.prompt = "Choose folder"
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = false
@@ -219,7 +219,7 @@ final class AppModel: ObservableObject {
             }
             return ids.count
         } catch {
-            actionError = "Die gemeinsamen Einstellungen konnten nicht übernommen werden: \(error.localizedDescription)"
+            actionError = "Could not apply shared settings: \(error.localizedDescription)"
             return 0
         }
     }
@@ -237,9 +237,9 @@ final class AppModel: ObservableObject {
     func chooseFolder(for id: String) {
         guard isWritable else { return }
         let panel = NSOpenPanel()
-        panel.title = "Bilderordner auswählen"
-        panel.message = "Dieser Ordner wird nur dem ausgewählten Desktop zugeordnet."
-        panel.prompt = "Ordner verwenden"
+        panel.title = "Choose image folder"
+        panel.message = "This folder will only be assigned to the selected desktop."
+        panel.prompt = "Use folder"
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = false
@@ -268,7 +268,7 @@ final class AppModel: ObservableObject {
             configuration.rules[id] = updated
             save()
             scan(id)
-        } catch { actionError = "Der Ordner konnte nicht zugeordnet werden: \(error.localizedDescription)" }
+        } catch { actionError = "Could not assign the folder: \(error.localizedDescription)" }
     }
 
     func updateRule(_ id: String, _ update: (inout SpaceRule) -> Void) {
@@ -345,7 +345,7 @@ final class AppModel: ObservableObject {
             updateLoginStatus()
         } catch {
             updateLoginStatus()
-            actionError = "Die Anmeldung konnte nicht geändert werden: \(error.localizedDescription) Starte Mac Spaces Wallpaper Manager dazu aus dem Programme-Ordner."
+            actionError = "Could not change the login setting: \(error.localizedDescription) Please launch Mac Spaces Wallpaper Manager from the Applications folder."
         }
     }
 
@@ -400,8 +400,8 @@ final class AppModel: ObservableObject {
                 self.folderAccess.removeValue(forKey: id)?.stopAccessingSecurityScopedResource()
                 if folder.startAccessingSecurityScopedResource() { self.folderAccess[id] = folder }
                 var notices: [String] = []
-                if result.skippedCount > 0 { notices.append("\(result.skippedCount) nicht lesbare Bilddatei(en) übersprungen") }
-                if result.unreadableDirectoryCount > 0 { notices.append("\(result.unreadableDirectoryCount) Ordner nicht lesbar") }
+                if result.skippedCount > 0 { notices.append("Skipped \(result.skippedCount) unreadable image \(result.skippedCount == 1 ? "file" : "files")") }
+                if result.unreadableDirectoryCount > 0 { notices.append("\(result.unreadableDirectoryCount) unreadable \(result.unreadableDirectoryCount == 1 ? "folder" : "folders")") }
                 self.libraries[id] = LibraryState(images: result.images, hasScanned: true,
                                                   notice: notices.isEmpty ? nil : notices.joined(separator: " · "))
                 if !result.images.contains(where: { $0.path == self.rule(for: id).selectedImagePath }) {
@@ -495,14 +495,14 @@ final class AppModel: ObservableObject {
             libraries[id]?.error = nil
             save()
         } catch {
-            libraries[id]?.error = "Das Hintergrundbild konnte nicht gesetzt werden: \(error.localizedDescription)"
+            libraries[id]?.error = "Could not set the wallpaper: \(error.localizedDescription)"
         }
     }
 
     func setDirectMode(_ enabled: Bool) {
         guard isWritable, !isApplyingDirect else { return }
         guard !enabled || directModeAvailable else {
-            actionError = "Der Direktmodus benötigt macOS 14 oder neuer und eine lesbare macOS-Hintergrunddatei."
+            actionError = "Direct mode requires macOS 14 or later and a readable macOS wallpaper store."
             return
         }
         directTask?.cancel()
@@ -547,9 +547,9 @@ final class AppModel: ObservableObject {
                     self.configuration.rules[id]?.lastAppliedBackgroundColor = nil
                 }
                 self.save()
-                self.directModeNotice = "Die letzte Direktmodus-Änderung wurde zurückgenommen. Die Automatik bleibt pausiert, bis du sie fortsetzt."
+                self.directModeNotice = "The last direct-mode change was undone. Automatic rotation remains paused until you resume it."
             } catch {
-                self.directModeNotice = "Die Wiederherstellung wurde abgebrochen: \(error.localizedDescription) Die Automatik bleibt pausiert."
+                self.directModeNotice = "Restoration was canceled: \(error.localizedDescription) Automatic rotation remains paused."
             }
             self.isApplyingDirect = false
         }
@@ -601,7 +601,7 @@ final class AppModel: ObservableObject {
             configuration.directWallpaperMode = false
             configuration.paused = true
             directQueue.removeAll()
-            directModeNotice = "Der Direktmodus wurde deaktiviert und die Automatik pausiert: \(error.localizedDescription) Du kannst anschließend im Standardmodus fortfahren."
+            directModeNotice = "Direct mode was disabled and automatic rotation paused: \(error.localizedDescription) You can continue in standard mode."
             lastDirectBackup = await directService.latestBackup()
             save()
         }
@@ -613,6 +613,6 @@ final class AppModel: ObservableObject {
     private func save() {
         guard isWritable else { return }
         do { try store.save(configuration) }
-        catch { persistenceError = "Die Einstellungen konnten nicht gespeichert werden: \(error.localizedDescription)" }
+        catch { persistenceError = "Could not save settings: \(error.localizedDescription)" }
     }
 }

@@ -35,18 +35,18 @@ public enum DirectWallpaperError: LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .unsupportedStore: return "Das Format der macOS-Hintergrunddatei wird vom Direktmodus nicht unterstützt."
-        case .globalWallpaper: return "In macOS ist ein gemeinsamer Hintergrund für alle Spaces aktiv. Deaktiviere zuerst „Auf allen Spaces anzeigen“ in den Hintergrundbild-Einstellungen."
-        case .missingSpace: return "macOS hat für einen ausgewählten Space noch keinen Eintrag gespeichert. Besuche den Space einmal und versuche es erneut."
-        case .linkedWallpaper: return "Ein ausgewählter Space verwendet einen gekoppelten Hintergrund und Bildschirmschoner. Wähle dort zunächst ein statisches Bild oder verwende den Standardmodus."
-        case .concurrentChange: return "Die Hintergrund-Einstellungen wurden gleichzeitig geändert. Es wurde nichts überschrieben. Bitte versuche es erneut."
-        case .busy: return "Eine andere Instanz der App ändert gerade die Hintergrundbilder."
-        case .agentUnavailable: return "Der macOS-Hintergrunddienst wurde nicht eindeutig gefunden."
-        case .agentControlFailed: return "Der macOS-Hintergrunddienst konnte nicht sicher angehalten werden."
-        case .reloadFailed: return "Der macOS-Hintergrunddienst hat die Änderung nicht bestätigt."
-        case .noBackup: return "Es ist keine wiederherstellbare Direktmodus-Sicherung vorhanden."
-        case .restoreConflict: return "Ein betroffener Hintergrund wurde inzwischen außerhalb der App geändert. Die Wiederherstellung wurde abgebrochen, damit diese Änderung erhalten bleibt."
-        case .invalidImage: return "Eine ausgewählte Bilddatei ist nicht mehr lesbar oder wird von macOS nicht unterstützt. Bitte lies den Bilderordner erneut ein."
+        case .unsupportedStore: return "Direct mode does not support this macOS wallpaper store format."
+        case .globalWallpaper: return "macOS is using a shared wallpaper for all Spaces. First turn off “Show on all Spaces” in Wallpaper settings."
+        case .missingSpace: return "macOS has not saved an entry for a selected Space yet. Visit the Space once and try again."
+        case .linkedWallpaper: return "A selected Space uses a linked wallpaper and screen saver. Choose a static image there first, or use standard mode."
+        case .concurrentChange: return "The wallpaper settings were changed at the same time. Nothing was overwritten. Please try again."
+        case .busy: return "Another instance of the app is currently changing wallpapers."
+        case .agentUnavailable: return "The macOS wallpaper service could not be uniquely identified."
+        case .agentControlFailed: return "The macOS wallpaper service could not be safely paused."
+        case .reloadFailed: return "The macOS wallpaper service did not confirm the change."
+        case .noBackup: return "No restorable direct-mode backup is available."
+        case .restoreConflict: return "An affected wallpaper has since changed outside the app. Restoration was canceled to preserve that change."
+        case .invalidImage: return "A selected image file is no longer readable or is not supported by macOS. Please rescan the image folder."
         case let .transactionFailed(reason, recovery): return "\(reason) \(recovery)"
         }
     }

@@ -118,14 +118,14 @@ public final class DirectWallpaperWriter {
                 var recovered = backup
                 recovered.restored = !restoring
                 try saveLatest(recovered)
-                throw DirectWallpaperError.transactionFailed(reason, "Die Änderung wurde zurückgenommen. Sicherung: \(backup.directory.path)")
+                throw DirectWallpaperError.transactionFailed(reason, "The change was undone. Backup: \(backup.directory.path)")
             } catch let recoveryError as DirectWallpaperError {
                 if case .transactionFailed = recoveryError { throw recoveryError }
                 throw DirectWallpaperError.transactionFailed(reason,
-                    "Die automatische Wiederherstellung konnte nicht abgeschlossen werden: \(recoveryError.localizedDescription) Sicherung: \(backup.directory.path)")
+                    "Automatic recovery could not be completed: \(recoveryError.localizedDescription) Backup: \(backup.directory.path)")
             } catch {
                 throw DirectWallpaperError.transactionFailed(reason,
-                    "Die automatische Wiederherstellung konnte nicht abgeschlossen werden: \(error.localizedDescription) Sicherung: \(backup.directory.path)")
+                    "Automatic recovery could not be completed: \(error.localizedDescription) Backup: \(backup.directory.path)")
             }
         }
     }

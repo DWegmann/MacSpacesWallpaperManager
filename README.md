@@ -6,7 +6,7 @@ I developed Mac Spaces Wallpaper Manager for my own use. Download the ready-to-r
 
 > **Noncommercial reuse only:** The original project code may be used, modified and shared under the [PolyForm Noncommercial License 1.0.0](LICENSE.md). This license does not permit commercial use.
 
-A native macOS app with a separate wallpaper folder for each desktop Space and display. Built with **SwiftUI and AppKit**, using Sparkle 2 for app updates. The universal app supports **Apple Silicon (arm64) and Intel (x86_64), starting with macOS 13 Ventura**. The current app interface is in German; this repository includes English and German documentation. Control names below are English translations of the German interface labels.
+A native macOS app with a separate wallpaper folder for each desktop Space and display. Built with **SwiftUI and AppKit**, using Sparkle 2 for app updates. The universal app supports **Apple Silicon (arm64) and Intel (x86_64), starting with macOS 13 Ventura**. The app interface is in English; this repository includes English and German documentation.
 
 **macOS 26 Tahoe is an intended target.** The app's minimum version is macOS 13; the optional direct mode requires macOS 14. Neither requires APIs available only in macOS 27. Space detection and direct mode use private macOS interfaces and may need changes after system updates. Direct mode checks the detected storage format before each change and is disabled by default.
 
@@ -78,7 +78,7 @@ Otherwise, the scripts use the selected macOS SDK. The deployment target remains
 
 ## Usage
 
-Starting with version 1.3.0, the app checks for updates daily by default. **Check for Updates…** (`Nach Updates suchen …`) is available in the app menu, menu bar and **Settings → Updates**. You can disable automatic checks there and still check manually. Download and installation require a click, followed by an app restart. Both the update feed and ZIP are verified using an app-specific Ed25519 key. Images, folder paths and system profiles are not sent; GitHub receives the usual connection data associated with a download request.
+Starting with version 1.3.0, the app checks for updates daily by default. **Check for Updates…** is available in the app menu, menu bar and **Settings → Updates**. You can disable automatic checks there and still check manually. Download and installation require a click, followed by an app restart. Both the update feed and ZIP are verified using an app-specific Ed25519 key. Images, folder paths and system profiles are not sent; GitHub receives the usual connection data associated with a download request.
 
 Older versions need one manual installation of version 1.3.0 or later to receive the updater. The feed becomes available when the first release containing `appcast.xml` is published. See [UPDATING.md](UPDATING.md) for preparing and publishing signed updates.
 
@@ -123,7 +123,7 @@ Before each actual change, the app creates a local backup. It pauses the logged-
 
 Writes are atomic. The app checks for concurrent changes before writing and after reloading. On error, it attempts to undo its own change, disables direct mode and pauses rotation. It displays the reason and backup location; you can then continue in standard mode.
 
-**Undo last direct-mode change …** restores only the desktop wallpapers affected by the last direct-mode change and pauses rotation. If an affected wallpaper has since changed outside the app, restoration stops. Later changes to other Spaces and existing screen savers remain intact.
+**Undo last direct-mode change…** restores only the desktop wallpapers affected by the last direct-mode change and pauses rotation. If an affected wallpaper has since changed outside the app, restoration stops. Later changes to other Spaces and existing screen savers remain intact.
 
 The ten latest backups are kept under:
 

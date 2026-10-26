@@ -24,31 +24,31 @@ extension WallpaperColor {
     private static let namedColors: [(name: String, color: WallpaperColor)] = {
         let palettes: [(String, [(String, String)])] = [
             ("Apple", [
-                ("Black", "Schwarz"), ("White", "Weiß"), ("Red", "Rot"),
-                ("Green", "Grün"), ("Blue", "Blau"), ("Cyan", "Cyan"),
-                ("Magenta", "Magenta"), ("Yellow", "Gelb"), ("Orange", "Orange"),
-                ("Purple", "Violett"), ("Brown", "Braun")
+                ("Black", "Black"), ("White", "White"), ("Red", "Red"),
+                ("Green", "Green"), ("Blue", "Blue"), ("Cyan", "Cyan"),
+                ("Magenta", "Magenta"), ("Yellow", "Yellow"), ("Orange", "Orange"),
+                ("Purple", "Purple"), ("Brown", "Brown")
             ]),
             ("Crayons", [
-                ("Licorice", "Lakritz"), ("Lead", "Blei"), ("Tungsten", "Wolfram"),
-                ("Iron", "Eisen"), ("Steel", "Stahl"), ("Tin", "Zinn"),
-                ("Nickel", "Nickel"), ("Aluminum", "Aluminium"), ("Magnesium", "Magnesium"),
-                ("Silver", "Silber"), ("Mercury", "Quecksilber"), ("Snow", "Schnee"),
-                ("Cayenne", "Cayenne"), ("Mocha", "Mokka"), ("Asparagus", "Spargel"),
-                ("Fern", "Farn"), ("Clover", "Klee"), ("Moss", "Moos"),
-                ("Teal", "Blaugrün"), ("Ocean", "Ozean"), ("Midnight", "Mitternacht"),
-                ("Eggplant", "Aubergine"), ("Plum", "Pflaume"), ("Maroon", "Kastanie"),
-                ("Maraschino", "Maraschino"), ("Tangerine", "Mandarine"), ("Lemon", "Zitrone"),
-                ("Lime", "Limette"), ("Spring", "Frühling"), ("Sea Foam", "Meerschaum"),
-                ("Turquoise", "Türkis"), ("Aqua", "Aqua"), ("Blueberry", "Blaubeere"),
-                ("Grape", "Traube"), ("Magenta", "Magenta"), ("Strawberry", "Erdbeere"),
-                ("Salmon", "Lachs"), ("Cantaloupe", "Melone"), ("Banana", "Banane"),
-                ("Honeydew", "Honigmelone"), ("Flora", "Flora"), ("Spindrift", "Gischt"),
-                ("Ice", "Eis"), ("Sky", "Himmel"), ("Orchid", "Orchidee"),
-                ("Lavender", "Lavendel"), ("Bubblegum", "Kaugummi"), ("Carnation", "Nelke")
+                ("Licorice", "Licorice"), ("Lead", "Lead"), ("Tungsten", "Tungsten"),
+                ("Iron", "Iron"), ("Steel", "Steel"), ("Tin", "Tin"),
+                ("Nickel", "Nickel"), ("Aluminum", "Aluminum"), ("Magnesium", "Magnesium"),
+                ("Silver", "Silver"), ("Mercury", "Mercury"), ("Snow", "Snow"),
+                ("Cayenne", "Cayenne"), ("Mocha", "Mocha"), ("Asparagus", "Asparagus"),
+                ("Fern", "Fern"), ("Clover", "Clover"), ("Moss", "Moss"),
+                ("Teal", "Teal"), ("Ocean", "Ocean"), ("Midnight", "Midnight"),
+                ("Eggplant", "Eggplant"), ("Plum", "Plum"), ("Maroon", "Maroon"),
+                ("Maraschino", "Maraschino"), ("Tangerine", "Tangerine"), ("Lemon", "Lemon"),
+                ("Lime", "Lime"), ("Spring", "Spring"), ("Sea Foam", "Sea Foam"),
+                ("Turquoise", "Turquoise"), ("Aqua", "Aqua"), ("Blueberry", "Blueberry"),
+                ("Grape", "Grape"), ("Magenta", "Magenta"), ("Strawberry", "Strawberry"),
+                ("Salmon", "Salmon"), ("Cantaloupe", "Cantaloupe"), ("Banana", "Banana"),
+                ("Honeydew", "Honeydew"), ("Flora", "Flora"), ("Spindrift", "Spindrift"),
+                ("Ice", "Ice"), ("Sky", "Sky"), ("Orchid", "Orchid"),
+                ("Lavender", "Lavender"), ("Bubblegum", "Bubblegum"), ("Carnation", "Carnation")
             ])
         ]
-        var colors: [(name: String, color: WallpaperColor)] = [("Schwarz", .black)]
+        var colors: [(name: String, color: WallpaperColor)] = [("Black", .black)]
         for (palette, entries) in palettes {
             guard let list = NSColorList(named: palette) else { continue }
             for (key, name) in entries {

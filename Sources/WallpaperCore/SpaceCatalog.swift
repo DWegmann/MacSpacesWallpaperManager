@@ -9,9 +9,9 @@ public enum SpaceCatalogError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .unavailable:
-            return "Die Space-Erkennung ist auf dieser macOS-Version nicht verfügbar. Es werden keine Hintergrundbilder geändert."
+            return "Space detection is not available on this version of macOS. No wallpapers will be changed."
         case .invalidData:
-            return "macOS hat keine erkennbaren Desktop-Spaces geliefert. Bitte aktualisiere die Liste erneut."
+            return "macOS did not return any recognizable desktop Spaces. Please refresh the list again."
         }
     }
 }

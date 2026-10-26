@@ -6,7 +6,7 @@ Ich habe Mac Spaces Wallpaper Manager für den eigenen Gebrauch entwickelt. Die 
 
 > **Nichtkommerzielle Weiterverwendung:** Der ursprüngliche Projektcode darf unter der [PolyForm Noncommercial License 1.0.0](LICENSE.md) verwendet, verändert und weitergegeben werden. Diese Lizenz erlaubt keine kommerzielle Nutzung.
 
-Native macOS-App für eigene Bilderordner pro Desktop-Space und Bildschirm. Geschrieben mit SwiftUI und AppKit, mit Sparkle 2 für App-Updates. Ein Universal-Binary unterstützt **Apple Silicon (ARM64) und Intel (x86_64), ab macOS 13 Ventura**.
+Native macOS-App für eigene Bilderordner pro Desktop-Space und Bildschirm. Geschrieben mit SwiftUI und AppKit, mit Sparkle 2 für App-Updates. Ein Universal-Binary unterstützt **Apple Silicon (ARM64) und Intel (x86_64), ab macOS 13 Ventura**. Die App-Oberfläche ist auf Englisch; die Dokumentation ist auf Deutsch und Englisch verfügbar.
 
 **macOS 26 Tahoe ist ausdrücklich als Ziel vorgesehen.** Die Mindestversion der App ist macOS 13, die des optionalen Direktmodus macOS 14; beide schließen macOS 26 ein. Es werden keine ausschließlich ab macOS 27 verfügbaren öffentlichen APIs benötigt. Der Direktmodus prüft das vorgefundene private Speicherformat vor jeder Änderung und bleibt standardmäßig ausgeschaltet.
 
@@ -71,34 +71,34 @@ Ein installiertes **macOS-26-SDK** wird automatisch bevorzugt, auch wenn die aus
 
 ## Benutzung
 
-Ab Version 1.3.0 prüft die App standardmäßig täglich auf neue Versionen. **Nach Updates suchen …** ist im App-Menü, in der Menüleiste und unter **Einstellungen → Updates** verfügbar. Dort lässt sich die automatische Prüfung ausschalten; die manuelle Prüfung bleibt verfügbar. Download und Installation startest du per Klick. Anschließend wird die App neu gestartet. Update-Feed und ZIP werden mit einem eigenen Ed25519-Schlüssel geprüft; es werden keine Bilder oder Ordnerpfade übertragen und kein Systemprofil gesendet. GitHub erhält die üblichen Verbindungsdaten einer Download-Anfrage.
+Ab Version 1.3.0 prüft die App standardmäßig täglich auf neue Versionen. **Check for Updates…** ist im App-Menü, in der Menüleiste und unter **Settings → Updates** verfügbar. Dort lässt sich die automatische Prüfung ausschalten; die manuelle Prüfung bleibt verfügbar. Download und Installation startest du per Klick. Anschließend wird die App neu gestartet. Update-Feed und ZIP werden mit einem eigenen Ed25519-Schlüssel geprüft; es werden keine Bilder oder Ordnerpfade übertragen und kein Systemprofil gesendet. GitHub erhält die üblichen Verbindungsdaten einer Download-Anfrage.
 
 Ältere Versionen müssen einmal manuell durch eine Version ab 1.3.0 ersetzt werden. Der Update-Feed ist verfügbar, sobald das erste Release mit `appcast.xml` veröffentlicht wurde. Hinweise zum Erstellen und Veröffentlichen signierter Updates stehen in [UPDATING.md](UPDATING.md).
 
 1. Gewünschten Desktop in der Seitenleiste auswählen. Weitere Desktops vorher in Mission Control anlegen.
-2. **Bilderordner auswählen**. Im Standardmodus wird ein erstes Bild auf dem sichtbaren Desktop gesetzt; ein inaktiver Desktop erhält es beim nächsten Besuch. Der zusätzliche Direktmodus kann auch inaktive Desktops sofort aktualisieren.
-3. **Unterordner einbeziehen** schaltet die rekursive Suche ein oder aus; standardmäßig ist sie eingeschaltet.
+2. **Choose image folder**. Im Standardmodus wird ein erstes Bild auf dem sichtbaren Desktop gesetzt; ein inaktiver Desktop erhält es beim nächsten Besuch. Der zusätzliche Direktmodus kann auch inaktive Desktops sofort aktualisieren.
+3. **Include subfolders** schaltet die rekursive Suche ein oder aus; standardmäßig ist sie eingeschaltet.
 4. Optional ein Bild in der Galerie auswählen, die Darstellung ändern oder einen automatischen Bildwechsel einstellen.
 
 Jeder Space hat eigene Einstellungen: Ordner, Rekursion, Bildauswahl, Darstellung, Reihenfolge und Wechselintervall. Zufällige Auswahl vermeidet direkte Wiederholungen, sofern mindestens zwei Bilder verfügbar sind. Alphabetische Reihenfolge verwendet natürliche Dateinamensortierung.
 
 ### Einstellungen für mehrere Spaces
 
-Über **Auswählen** neben „Deine Spaces“ wird die Mehrfachauswahl geöffnet. Die gewünschten Desktop-Zeilen lassen sich anhaken; **Alle** neben einem Bildschirm wählt dessen Spaces aus. In der gemeinsamen Bearbeitung stehen außerdem **Alle auswählen** und **Auswahl leeren** zur Verfügung.
+Über **Select** neben „Your Spaces“ wird die Mehrfachauswahl geöffnet. Die gewünschten Desktop-Zeilen lassen sich anhaken; **All** neben einem Bildschirm wählt dessen Spaces aus. In der gemeinsamen Bearbeitung stehen außerdem **Select all** und **Clear selection** zur Verfügung.
 
-Anschließend die gewünschten Änderungen anhaken: Bilderordner, Unterordner, Bildwechsel, Darstellung, Hintergrundfarbe, Reihenfolge oder Aktivierung. **Auf … Spaces anwenden** übernimmt ausschließlich diese Felder für die ausgewählten Spaces. Nicht angehakte Einstellungen und die anderen Spaces bleiben erhalten. Bestehende Bildauswahlen werden beibehalten, solange kein neuer Ordner zugeordnet wird. Ein neuer gemeinsamer Ordner setzt die Bildauswahl der betroffenen Spaces zurück und wird für sie neu eingelesen. Mit **Fertig** oder **Mehrfachauswahl beenden** geht es zurück zur Einzelbearbeitung.
+Anschließend die gewünschten Änderungen anhaken: Bilderordner, Unterordner, Bildwechsel, Darstellung, Hintergrundfarbe, Reihenfolge oder Aktivierung. **Apply to … Spaces** übernimmt ausschließlich diese Felder für die ausgewählten Spaces. Nicht angehakte Einstellungen und die anderen Spaces bleiben erhalten. Bestehende Bildauswahlen werden beibehalten, solange kein neuer Ordner zugeordnet wird. Ein neuer gemeinsamer Ordner setzt die Bildauswahl der betroffenen Spaces zurück und wird für sie neu eingelesen. Mit **Done** oder **Exit multiple selection** geht es zurück zur Einzelbearbeitung.
 
 ### Hintergrundfarbe beim Anpassen
 
-Bei der Darstellung **An Bildschirm anpassen** erscheint **Hintergrundfarbe** mit einer nativen Farbauswahl. Die Farbe füllt die freien Flächen neben beziehungsweise über dem Bild und ist in der Vorschau sichtbar. Der aktuelle Farbname (etwa **Silber**) beziehungsweise der Hexwert wird direkt angezeigt. **Auf Schwarz zurücksetzen** setzt die Farbe zurück. Sie wird pro Space gespeichert und funktioniert im Standardmodus und im optionalen Direktmodus. In der Mehrfachauswahl lässt sich dieselbe Farbe auf mehrere Spaces übertragen; die Darstellung wird dabei nur geändert, wenn auch „Darstellung ändern“ angehakt ist. Vorhandene Einstellungen ohne Farbangabe verwenden weiterhin Schwarz.
+Bei der Darstellung **Fit to screen** erscheint **Background color** mit einer nativen Farbauswahl. Die Farbe füllt die freien Flächen neben beziehungsweise über dem Bild und ist in der Vorschau sichtbar. Der aktuelle Farbname (etwa **Silver**) beziehungsweise der Hexwert wird direkt angezeigt. **Reset to Black** setzt die Farbe zurück. Sie wird pro Space gespeichert und funktioniert im Standardmodus und im optionalen Direktmodus. In der Mehrfachauswahl lässt sich dieselbe Farbe auf mehrere Spaces übertragen; die Darstellung wird dabei nur geändert, wenn auch „Change image scaling“ angehakt ist. Vorhandene Einstellungen ohne Farbangabe verwenden weiterhin Schwarz.
 
-Automatischer Wechsel: manuell, bei erneutem Betreten eines Spaces, alle 5/15/30 Minuten, stündlich oder täglich. Im Standardmodus holen inaktive Desktops einen fälligen Wechsel beim nächsten Besuch nach; mit eingeschaltetem Direktmodus werden auch inaktive Desktops aktualisiert. Während des Ruhezustands wird kein Timer abgearbeitet. Neue oder entfernte Dateien werden mit **Ordner neu einlesen** übernommen. Der Timer prüft alle 15 Sekunden, sodass Intervalle entsprechend leicht verzögert sein können.
+Automatischer Wechsel: manuell, bei erneutem Betreten eines Spaces, alle 5/15/30 Minuten, stündlich oder täglich. Im Standardmodus holen inaktive Desktops einen fälligen Wechsel beim nächsten Besuch nach; mit eingeschaltetem Direktmodus werden auch inaktive Desktops aktualisiert. Während des Ruhezustands wird kein Timer abgearbeitet. Neue oder entfernte Dateien werden mit **Rescan folder** übernommen. Der Timer prüft alle 15 Sekunden, sodass Intervalle entsprechend leicht verzögert sein können.
 
-Das Fenster kann geschlossen werden; die App läuft in der Menüleiste weiter. Dort gibt es **Nächstes Hintergrundbild**, **Automatik pausieren** und **Beenden**. `⌘R` aktualisiert die Spaces, `⇧⌘N` setzt das nächste Bild für sichtbare, aktivierte Spaces. In den Einstellungen (`⌘,`) lässt sich der Anmeldestart einschalten.
+Das Fenster kann geschlossen werden; die App läuft in der Menüleiste weiter. Dort gibt es **Next wallpaper**, **Pause automatic rotation** und **Quit**. `⌘R` aktualisiert die Spaces, `⇧⌘N` setzt das nächste Bild für sichtbare, aktivierte Spaces. In den Einstellungen (`⌘,`) lässt sich der Anmeldestart einschalten.
 
 ## Zusätzlicher Direktmodus für inaktive Spaces
 
-Unter **Einstellungen → Direktmodus (experimentell) → Auch inaktive Spaces sofort aktualisieren** lässt sich der inoffizielle Weg einschalten. Die Option ist bei neuen und vorhandenen Installationen standardmäßig ausgeschaltet. Sie benötigt macOS 14 oder neuer und eine lesbare `Index.plist`.
+Unter **Settings → Direct mode (experimental) → Update inactive Spaces immediately** lässt sich der inoffizielle Weg einschalten. Die Option ist bei neuen und vorhandenen Installationen standardmäßig ausgeschaltet. Sie benötigt macOS 14 oder neuer und eine lesbare `Index.plist`.
 
 Im Direktmodus gelten Bildauswahl, Darstellung und Wechselintervalle auch für inaktive, zugeordnete Desktop-Spaces. Ein Wechsel zwischen Desktops ist dafür nicht nötig. Änderungen mehrerer Spaces werden kurz gesammelt, damit der Hintergrunddienst möglichst nur einmal neu gestartet wird.
 
@@ -106,7 +106,7 @@ Der Modus ändert ausschließlich `Spaces[Space-UUID].Displays[Bildschirm-UUID].
 
 Vor jeder tatsächlichen Änderung entsteht eine lokale Sicherung. Der Hintergrunddienst `WallpaperAgent` des angemeldeten Benutzers wird für die kurze Schreibphase angehalten und anschließend neu gestartet. Ein unabhängiger Hilfsprozess setzt ihn spätestens nach drei Sekunden fort, falls die App während der Schreibphase beendet wird. **Beim Bildwechsel kann der Hintergrund dabei kurz flackern.** Dieser Hinweis steht auch direkt bei der experimentellen Option in den Einstellungen. Dateischreibzugriffe erfolgen atomar; konkurrierende Änderungen werden vor dem Schreiben und nach dem Neuladen geprüft. Bei einem Fehler versucht die App, die eigene Änderung zurückzunehmen, deaktiviert den Direktmodus und pausiert die Automatik. Der Grund und der Sicherungsort werden angezeigt. Danach kann im Standardmodus fortgefahren werden.
 
-**Letzte Direktmodus-Änderung rückgängig machen …** in den Einstellungen stellt nur die zuletzt betroffenen Desktop-Hintergründe wieder her und pausiert die Automatik. Wurde ein betroffener Hintergrund inzwischen außerhalb der App geändert, wird die Rücknahme abgebrochen. Spätere Änderungen an anderen Spaces oder vorhandenen Bildschirmschonern bleiben erhalten.
+**Undo last direct-mode change…** in den Einstellungen stellt nur die zuletzt betroffenen Desktop-Hintergründe wieder her und pausiert die Automatik. Wurde ein betroffener Hintergrund inzwischen außerhalb der App geändert, wird die Rücknahme abgebrochen. Spätere Änderungen an anderen Spaces oder vorhandenen Bildschirmschonern bleiben erhalten.
 
 Die zehn neuesten Sicherungen liegen unter `~/Library/Application Support/SpacePaper/WallpaperBackups/`. Jede enthält `before.plist`, `after.plist` und ein gezieltes Rücknahmeprotokoll `undo.plist`; die Dateien sind nur für den Benutzer lesbar. Die Einstellungen bieten einen Knopf zum Öffnen der Sicherungen im Finder. Der Direktmodus ist nicht von Apple unterstützt und kann nach macOS-Updates eine Anpassung benötigen. Das Grundverfahren ist beispielsweise in [backgrounds](https://github.com/ThomasBPG/backgrounds/blob/main/wallhaven-wallpaper.py) und [wallall](https://github.com/TresChar/wallall) nachvollziehbar; diese App schreibt gezielt einzelne Zuordnungen statt einen gemeinsamen Hintergrund für alle Spaces.
 
@@ -136,7 +136,7 @@ Originale bleiben unverändert in deinem Ordner. Bilder und Ordnerzuordnungen we
 
 Der bisherige interne Datenordner und die Bundle-ID bleiben bei der Umbenennung erhalten, damit bestehende Zuordnungen weiterhin geladen werden.
 
-Bei einer beschädigten oder unbekannten Einstellungsdatei stoppt die App automatische Änderungen und erhält die Datei. Über **Einstellungsdatei im Finder zeigen** lässt sich diese nach Beenden der App sichern und für einen Neustart umbenennen.
+Bei einer beschädigten oder unbekannten Einstellungsdatei stoppt die App automatische Änderungen und erhält die Datei. Über **Show configuration file in Finder** lässt sich diese nach Beenden der App sichern und für einen Neustart umbenennen.
 
 ## Prüfen
 

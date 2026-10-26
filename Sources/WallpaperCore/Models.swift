@@ -5,10 +5,10 @@ public enum ImageLayout: String, Codable, CaseIterable, Sendable {
 
     public var title: String {
         switch self {
-        case .fill: return "Bildschirmfüllend"
-        case .fit: return "An Bildschirm anpassen"
-        case .stretch: return "Dehnen"
-        case .center: return "Zentrieren"
+        case .fill: return "Fill screen"
+        case .fit: return "Fit to screen"
+        case .stretch: return "Stretch"
+        case .center: return "Center"
         }
     }
 }
@@ -18,13 +18,13 @@ public enum RotationMode: String, Codable, CaseIterable, Sendable {
 
     public var title: String {
         switch self {
-        case .manual: return "Manuell"
-        case .onSpaceChange: return "Bei jedem Space-Wechsel"
-        case .everyFiveMinutes: return "Alle 5 Minuten"
-        case .everyFifteenMinutes: return "Alle 15 Minuten"
-        case .everyThirtyMinutes: return "Alle 30 Minuten"
-        case .hourly: return "Jede Stunde"
-        case .daily: return "Jeden Tag"
+        case .manual: return "Manual"
+        case .onSpaceChange: return "On every Space change"
+        case .everyFiveMinutes: return "Every 5 minutes"
+        case .everyFifteenMinutes: return "Every 15 minutes"
+        case .everyThirtyMinutes: return "Every 30 minutes"
+        case .hourly: return "Every hour"
+        case .daily: return "Every day"
         }
     }
 

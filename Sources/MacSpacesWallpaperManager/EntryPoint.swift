@@ -23,9 +23,9 @@ struct EntryPoint {
                       originalRoot.isEqual(restoredRoot), try Data(contentsOf: writer.storeURL) == before else {
                     throw DirectWallpaperError.concurrentChange
                 }
-                print("Direktmodus-Prüfung erfolgreich: \(patch.undo.count) gezielte Zuordnung(en), Rücknahme geprüft. Keine Dateien geschrieben und kein Hintergrunddienst neu gestartet.")
+                print("Direct-mode check passed: \(patch.undo.count) targeted \(patch.undo.count == 1 ? "assignment" : "assignments"), undo verified. No files were written and no wallpaper service was restarted.")
             } catch {
-                fputs("Direktmodus-Prüfung fehlgeschlagen: \(error.localizedDescription)\n", stderr)
+                fputs("Direct-mode check failed: \(error.localizedDescription)\n", stderr)
                 exit(1)
             }
         } else if CommandLine.arguments.contains("--diagnostics") {
@@ -39,7 +39,7 @@ struct EntryPoint {
                 let data = try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
                 print(String(decoding: data, as: UTF8.self))
             } catch {
-                fputs("Space-Erkennung fehlgeschlagen: \(error.localizedDescription)\n", stderr)
+                fputs("Space detection failed: \(error.localizedDescription)\n", stderr)
                 exit(1)
             }
         } else {

@@ -10,7 +10,7 @@ public struct ScanResult: Sendable {
 public enum ScanError: LocalizedError {
     case unavailableFolder
     public var errorDescription: String? {
-        "Der Ordner ist nicht erreichbar oder kann nicht gelesen werden. Bitte wähle ihn erneut aus."
+        "The folder is unavailable or cannot be read. Please select it again."
     }
 }
 

@@ -15,7 +15,7 @@ final class UpdateController: ObservableObject {
 
         // `swift run` produces a bare executable without the bundle metadata required by Sparkle.
         guard Bundle.main.bundleURL.pathExtension == "app" else {
-            startupError = "Updates sind in der gebauten App verfügbar. Bitte starte die App aus dem Programme-Ordner."
+            startupError = "Updates are available in the built app. Please launch the app from the Applications folder."
             return
         }
 
@@ -27,7 +27,7 @@ final class UpdateController: ObservableObject {
         do {
             try controller.updater.start()
         } catch {
-            startupError = "Die Update-Prüfung konnte nicht gestartet werden: \(error.localizedDescription)"
+            startupError = "Could not start the update check: \(error.localizedDescription)"
         }
     }
 
@@ -47,7 +47,7 @@ struct CheckForUpdatesButton: View {
     @ObservedObject var updates: UpdateController
 
     var body: some View {
-        Button("Nach Updates suchen …") { updates.checkForUpdates() }
+        Button("Check for Updates…") { updates.checkForUpdates() }
             .disabled(!updates.canCheckForUpdates || updates.startupError != nil)
     }
 }
